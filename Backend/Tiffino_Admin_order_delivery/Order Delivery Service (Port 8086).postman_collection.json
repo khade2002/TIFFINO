@@ -1,0 +1,130 @@
+{
+	"info": {
+		"_postman_id": "99ff82bc-f5c1-4aae-8d36-127c3c733898",
+		"name": "Order Delivery Service (Port 8086)",
+		"description": "Order and Delivery Management APIs (Spring Boot @8086)",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "47190049",
+		"_collection_link": "https://zaidsayyed-3120866.postman.co/workspace/zaid's-Workspace~96c41a53-bcc0-4a11-8c1c-7847a8e909b0/collection/47190049-99ff82bc-f5c1-4aae-8d36-127c3c733898?action=share&source=collection_link&creator=47190049"
+	},
+	"item": [
+		{
+			"name": "Place New Order",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"orderType\": \"ONLINE\",\n  \"subscriptionId\": 101,\n  \"totalAmount\": 480.50,\n  \"status\": \"PLACED\",\n  \"paymentId\": \"PAY123456\",\n  \"notes\": \"Please deliver before 8 PM\",\n  \"appliedDiscount\": 10.5,\n  \"items\": [\n    {\n      \"mealName\": \"Paneer Butter Masala\",\n      \"quantity\": 2,\n      \"pricePerItem\": 200,\n      \"customizations\": \"Less spicy\"\n    },\n    {\n      \"mealName\": \"Butter Naan\",\n      \"quantity\": 4,\n      \"pricePerItem\": 20,\n      \"customizations\": \"Extra butter\"\n    }\n  ],\n  \"delivery\": {\n    \"deliveryPartnerName\": \"Ravi Kumar\",\n    \"deliveryPartnerPhone\": \"9876543210\"\n  }\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8086/orders",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8086",
+					"path": [
+						"orders"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Order By ID",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8086/orders/1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8086",
+					"path": [
+						"orders",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update Existing Order",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"orderType\": \"ONLINE\",\n  \"subscriptionId\": 102,\n  \"totalAmount\": 510.00,\n  \"status\": \"UPDATED\",\n  \"paymentId\": \"PAY987654\",\n  \"notes\": \"Deliver ASAP\",\n  \"appliedDiscount\": 5.0,\n  \"items\": [\n    {\n      \"mealName\": \"Paneer Butter Masala\",\n      \"quantity\": 1,\n      \"pricePerItem\": 220,\n      \"customizations\": \"Medium spicy\"\n    }\n  ],\n  \"delivery\": {\n    \"deliveryPartnerName\": \"Amit Sharma\",\n    \"deliveryPartnerPhone\": \"9988776655\"\n  }\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8086/orders/1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8086",
+					"path": [
+						"orders",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete Order",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8086/orders/1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8086",
+					"path": [
+						"orders",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Delivery Partner Details",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8086/orders/1/delivery-partner",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8086",
+					"path": [
+						"orders",
+						"1",
+						"delivery-partner"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

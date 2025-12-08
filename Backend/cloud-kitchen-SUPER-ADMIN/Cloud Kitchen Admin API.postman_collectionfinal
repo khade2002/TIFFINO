@@ -1,0 +1,388 @@
+{
+	"info": {
+		"_postman_id": "95e4d2f2-aa87-4c7f-a9df-98c7a199713e",
+		"name": "Cloud Kitchen Super Admin API",
+		"description": "Postman collection for Cloud Kitchen Admin backend",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "47190049",
+		"_collection_link": "https://zaidsayyed-3120866.postman.co/workspace/zaid's-Workspace~96c41a53-bcc0-4a11-8c1c-7847a8e909b0/collection/47190049-95e4d2f2-aa87-4c7f-a9df-98c7a199713e?action=share&source=collection_link&creator=47190049"
+	},
+	"item": [
+		{
+			"name": "Managers",
+			"item": [
+				{
+					"name": "Create Manager",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJzdXBlcmFkbWluIiwiaXNzIjoiY2xvdWQta2l0Y2hlbiIsImlhdCI6MTc1NzMwNDg5NH0.qT9oDRvD7kKxHnz8y4n8sTP8aJ2zBDAtShNWC7gBkb0",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"prasand\",\n  \"email\": \"prasand@test.com\",\n  \"phone\": \"5678901234\",\n  \"adharCard\": \"dsddsdsd\",\n  \"panCard\": \"ddddddd\",\n  \"address\": \"jalgao\",\n  \"assignedKitchen\": \"Kitchen5\",\n  \"kitchenId\": 7\n}"
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/admin/managers",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"admin",
+								"managers"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Managers",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:8080/api/admin/managers",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"admin",
+								"managers"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Manager",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJzdXBlcmFkbWluIiwiaXNzIjoiY2xvdWQta2l0Y2hlbiIsImlhdCI6MTc1NzMwNDg5NH0.qT9oDRvD7kKxHnz8y4n8sTP8aJ2zBDAtShNWC7gBkb0",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:8080/api/admin/managers/2",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"admin",
+								"managers",
+								"2"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Manager",
+					"request": {
+						"method": "GET",
+						"header": []
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Delivery Partners",
+			"item": [
+				{
+					"name": "Create Delivery Partner",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJzdXBlcmFkbWluIiwiaXNzIjoiY2xvdWQta2l0Y2hlbiIsImlhdCI6MTc1NzMwNDg5NH0.qT9oDRvD7kKxHnz8y4n8sTP8aJ2zBDAtShNWC7gBkb0",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"aniket\",\n  \"email\": \"anik@test.com\",\n  \"phone\": \"9998887777\",\n   \"driverLicense\": 8484555,\n  \"adharCard\": \"dsddsdsd\",\n  \"panCard\": \"ddddddd\",\n  \"vehicleDetails\": \"MH14bv8985\",\n  \"assignedArea\": \"jalgao\",\n  \"kitchenId\": 7\n}"
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/admin/delivery-partners",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"admin",
+								"delivery-partners"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Delivery Partners",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:8080/api/admin/delivery-partners",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"admin",
+								"delivery-partners"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Delivery Partner",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:8080/api/admin/delivery-partners/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"admin",
+								"delivery-partners",
+								"1"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Kitchens",
+			"item": [
+				{
+					"name": "Create Kitchen",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"Kitchen1\",\n  \"address\": \"Pune\",\n  \"state\": \"MH\",\n  \"city\": \"Pune\",\n  \"rating\": 4.5,\n  \"profitable\": true\n}"
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/admin/kitchens",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"admin",
+								"kitchens"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Kitchens",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:8080/api/admin/kitchens",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"admin",
+								"kitchens"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Kitchen",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:8080/api/admin/kitchens/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"admin",
+								"kitchens",
+								"1"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Auth - Login",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"username\": \"superadmin\",\n  \"password\": \"SuperAdmin@123\"\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/admin/login",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"admin",
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Reports",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{token}}"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:8080/api/admin/reports",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"admin",
+						"reports"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"variable": [
+		{
+			"key": "token",
+			"value": ""
+		}
+	]
+}
