@@ -1,3 +1,183 @@
+// import React, { useEffect, useState } from "react";
+// import { useParams, useNavigate } from "react-router-dom";
+// import { motion } from "framer-motion";
+
+// import {
+//   CheckCircle2,
+//   CalendarDays,
+//   BadgePercent,
+//   Truck,
+//   ArrowRight,
+// } from "lucide-react";
+
+// import "@fontsource/playfair-display";
+// import "@fontsource/inter";
+
+// import { getSubscriptionReview } from "../../api/api";
+
+// export default function SubscriptionReview() {
+//   const { subscriptionId } = useParams();
+//   const navigate = useNavigate();
+
+//   const [loading, setLoading] = useState(true);
+//   const [sub, setSub] = useState(null);
+//   const [error, setError] = useState("");
+
+//   // Fetch review
+//   useEffect(() => {
+//     const fetchReview = async () => {
+//       try {
+//         const res = await getSubscriptionReview(subscriptionId);
+//         setSub(res.data);
+//       } catch (err) {
+//         setError(
+//           err?.response?.data?.message ||
+//             "Subscription details load karte time error aa gaya."
+//         );
+//       } finally {
+//         setLoading(false);
+//       }
+//     };
+
+//     if (subscriptionId) fetchReview();
+//   }, [subscriptionId]);
+
+//   return (
+//     <div className="min-h-screen bg-gradient-to-b from-white via-red-50/20 to-white font-inter flex items-center justify-center px-4">
+//       <div className="max-w-xl w-full">
+//         {/* LOADING */}
+//         {loading && (
+//           <div className="flex justify-center py-10">
+//             <div className="h-10 w-10 border-2 border-[#E23744] border-t-transparent rounded-full animate-spin" />
+//           </div>
+//         )}
+
+//         {/* ERROR */}
+//         {!loading && error && (
+//           <div className="bg-white border border-red-200 text-red-600 rounded-2xl p-6 shadow-lg">
+//             {error}
+//           </div>
+//         )}
+
+//         {/* NOT FOUND */}
+//         {!loading && !error && !sub && (
+//           <div className="bg-white border border-gray-200 text-gray-700 rounded-2xl p-6 shadow-lg">
+//             Subscription not found.
+//           </div>
+//         )}
+
+//         {/* SUCCESS UI */}
+//         {!loading && sub && (
+//           <motion.div
+//             initial={{ opacity: 0, y: 25 }}
+//             animate={{ opacity: 1, y: 0 }}
+//             transition={{ duration: 0.5 }}
+//             className="bg-white border-2 border-gray-100 rounded-3xl p-8 shadow-2xl text-center relative overflow-hidden"
+//           >
+//             {/* Background accent circles */}
+//             <div className="absolute -top-10 -right-10 w-32 h-32 bg-[#E23744]/10 rounded-full blur-2xl" />
+//             <div className="absolute -bottom-10 -left-10 w-40 h-40 bg-[#E23744]/10 rounded-full blur-2xl" />
+
+//             <div className="relative z-10">
+//               {/* Success icon */}
+//               <CheckCircle2 className="w-14 h-14 text-emerald-500 mx-auto mb-3" />
+
+//               <h1 className="text-2xl md:text-3xl font-bold font-['Playfair_Display'] mb-2">
+//                 Subscription Activated 🎉
+//               </h1>
+
+//               <p className="text-sm text-gray-600 mb-6">
+//                 Your Tiffino subscription is now active.  
+//                 Discounts & free delivery will apply automatically on your orders.
+//               </p>
+
+//               {/* DETAILS CARD */}
+//               <div className="bg-gray-50 border border-gray-100 rounded-2xl p-5 text-left mb-6">
+//                 {/* TOP DETAILS */}
+//                 <div className="flex items-center justify-between mb-3">
+//                   <div>
+//                     <p className="text-xs text-gray-500">Subscription ID</p>
+//                     <p className="text-sm font-semibold text-gray-800">
+//                       {sub.subscriptionid}
+//                     </p>
+//                   </div>
+
+//                   <span className="px-3 py-1 text-xs font-semibold bg-emerald-100 text-emerald-700 rounded-full flex items-center gap-1">
+//                     <CheckCircle2 className="w-3 h-3" />
+//                     {sub.status}
+//                   </span>
+//                 </div>
+
+//                 {/* DATES */}
+//                 <div className="flex items-center gap-2 mb-2 text-sm text-gray-700">
+//                   <CalendarDays className="w-4 h-4 text-[#E23744]" />
+//                   <span>
+//                     {sub.startDate} – {sub.endDate}
+//                   </span>
+//                 </div>
+
+//                 {/* DISCOUNT */}
+//                 <div className="flex items-center gap-2 mb-2 text-sm text-gray-700">
+//                   <BadgePercent className="w-4 h-4 text-emerald-600" />
+//                   <span>{sub.discountPercentage}% subscription discount</span>
+//                 </div>
+
+//                 {/* FREE DELIVERY */}
+//                 <div className="flex items-center gap-2 mb-2 text-sm text-gray-700">
+//                   <Truck className="w-4 h-4 text-[#E23744]" />
+//                   <span>
+//                     {sub.freeDelivery
+//                       ? "Free delivery on all meals in this subscription."
+//                       : "Delivery charges apply normally."}
+//                   </span>
+//                 </div>
+
+//                 {/* Frequency */}
+//                 {sub.frequency && (
+//                   <p className="text-xs text-gray-500 mt-2">
+//                     Frequency: <span className="font-semibold">{sub.frequency}</span>
+//                   </p>
+//                 )}
+//               </div>
+
+//               {/* NOTE */}
+//               <p className="text-xs text-gray-500 mb-4">
+//                 While ordering, simply use{" "}
+//                 <span className="font-semibold">subscriptionId = {sub.subscriptionid}</span>.  
+//                 Backend automatically applies:
+//                 <br />
+//                 <b>discount + free delivery</b> using:  
+//                 <code className="ml-1 bg-gray-100 px-2 py-0.5 rounded text-[11px]">
+//                   POST /subscri/orders/from-subscription/{`{subscriptionId}`}
+//                 </code>
+//               </p>
+
+//               {/* ACTION BUTTONS */}
+//               <div className="flex flex-col sm:flex-row gap-3 justify-center">
+//                 <button
+//                   onClick={() => navigate("/profile")}
+//                   className="flex-1 px-6 py-3 bg-[#E23744] text-white rounded-full text-sm font-semibold shadow-md hover:shadow-[#E23744]/40 transition-all hover:-translate-y-[1px] flex items-center justify-center gap-2"
+//                 >
+//                   Go to Profile
+//                   <ArrowRight className="w-4 h-4" />
+//                 </button>
+
+//                 <button
+//                   onClick={() => navigate("/cuisine")}
+//                   className="flex-1 px-6 py-3 border border-gray-300 bg-white rounded-full text-sm font-semibold hover:bg-gray-50 transition-all"
+//                 >
+//                   Start Ordering
+//                 </button>
+//               </div>
+//             </div>
+//           </motion.div>
+//         )}
+//       </div>
+//     </div>
+//   );
+// }
+
+
 
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";

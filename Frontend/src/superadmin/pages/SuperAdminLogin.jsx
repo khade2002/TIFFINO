@@ -1,3 +1,179 @@
+// // ==========================================================
+// // src/superadmin/pages/SuperAdminLogin.jsx
+// // FINAL — Matches updated AuthContext + api.js
+// // ==========================================================
+
+// import { useEffect, useState, useRef } from "react";
+// import { motion } from "framer-motion";
+// import { useNavigate, useLocation } from "react-router-dom";
+// import toast from "react-hot-toast";
+// import { Lock, AtSign, Eye, EyeOff, ShieldCheck } from "lucide-react";
+
+// import { useSuperAdminAuth } from "../context/SuperAdminAuthContext";
+
+// const SUPER_TOKEN = "super_token";
+
+// export default function SuperAdminLogin() {
+//   const navigate = useNavigate();
+//   const location = useLocation();
+//   const usernameRef = useRef(null);
+
+//   const { login, isAuthenticated } = useSuperAdminAuth();
+
+//   const [form, setForm] = useState({
+//     username: "superadmin",
+//     password: "SuperAdmin@123",
+//   });
+
+//   const [showPassword, setShowPassword] = useState(false);
+//   const [shake, setShake] = useState(false);
+//   const [loading, setLoading] = useState(false);
+
+//   // Autofocus username
+//   useEffect(() => {
+//     usernameRef.current?.focus();
+//   }, []);
+
+//   // If already logged in → redirect
+//   useEffect(() => {
+//     const token = localStorage.getItem(SUPER_TOKEN);
+//     if (token || isAuthenticated) {
+//       navigate("/superadmin/dashboard", { replace: true });
+//     }
+//   }, [isAuthenticated]);
+
+//   const triggerShake = () => {
+//     setShake(true);
+//     setTimeout(() => setShake(false), 400);
+//   };
+
+//   const handleSubmit = async (e) => {
+//     e.preventDefault();
+
+//     if (!form.username.trim() || !form.password.trim()) {
+//       toast.error("Username and password required");
+//       triggerShake();
+//       return;
+//     }
+
+//     setLoading(true);
+
+//     const ok = await login({
+//       username: form.username.trim(),
+//       password: form.password,
+//     });
+
+//     if (ok) {
+//       const redirectTo =
+//         location.state?.from?.pathname || "/superadmin/dashboard";
+
+//       navigate(redirectTo, { replace: true });
+//     } else {
+//       triggerShake();
+//     }
+
+//     setLoading(false);
+//   };
+
+//   return (
+//     <div className="min-h-[85vh] flex items-center justify-center bg-gradient-to-br from-gray-50 to-gray-200 px-4 py-10">
+//       <motion.div
+//         initial={{ opacity: 0, y: 50, scale: 0.92 }}
+//         animate={{ opacity: 1, y: 0, scale: 1 }}
+//         transition={{ duration: 0.35 }}
+//         className="w-full max-w-md bg-white/80 backdrop-blur-xl rounded-3xl shadow-2xl border p-8"
+//       >
+//         {/* Badge */}
+//         <div className="flex justify-center mb-6">
+//           <div className="rounded-full bg-purple-100 px-4 py-2 text-purple-700 font-semibold text-sm border shadow-sm">
+//             <ShieldCheck className="w-4 h-4 inline-block mr-1" />
+//             SuperAdmin Panel
+//           </div>
+//         </div>
+
+//         <h2 className="text-3xl font-extrabold text-center text-gray-800">
+//           SuperAdmin Login
+//         </h2>
+
+//         <motion.form
+//           onSubmit={handleSubmit}
+//           animate={shake ? { x: [-8, 8, -8, 8, 0] } : {}}
+//           transition={{ duration: 0.35 }}
+//           className="mt-6 space-y-6"
+//         >
+//           {/* USERNAME */}
+//           <div>
+//             <label className="text-sm font-semibold text-gray-600">
+//               Username
+//             </label>
+//             <div className="relative">
+//               <AtSign className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+
+//               <input
+//                 ref={usernameRef}
+//                 name="username"
+//                 value={form.username}
+//                 onChange={(e) =>
+//                   setForm({ ...form, username: e.target.value })
+//                 }
+//                 className="w-full pl-10 pr-3 py-3 border rounded-xl
+//                            focus:ring-2 focus:ring-purple-500 outline-none"
+//               />
+//             </div>
+//           </div>
+
+//           {/* PASSWORD */}
+//           <div>
+//             <label className="text-sm font-semibold text-gray-600">
+//               Password
+//             </label>
+//             <div className="relative">
+//               <Lock className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+
+//               <input
+//                 type={showPassword ? "text" : "password"}
+//                 name="password"
+//                 value={form.password}
+//                 onChange={(e) =>
+//                   setForm({ ...form, password: e.target.value })
+//                 }
+//                 className="w-full pl-10 pr-12 py-3 border rounded-xl
+//                            focus:ring-2 focus:ring-purple-500 outline-none"
+//               />
+
+//               <button
+//                 type="button"
+//                 onClick={() => setShowPassword(!showPassword)}
+//                 className="absolute right-3 top-1/2 -translate-y-1/2"
+//               >
+//                 {showPassword ? (
+//                   <EyeOff className="text-gray-600" />
+//                 ) : (
+//                   <Eye className="text-gray-600" />
+//                 )}
+//               </button>
+//             </div>
+//           </div>
+
+//           {/* LOGIN BUTTON */}
+//           <motion.button
+//             type="submit"
+//             whileTap={{ scale: 0.96 }}
+//             disabled={loading}
+//             className="w-full py-3 rounded-xl font-bold text-white 
+//                        bg-gradient-to-r from-purple-600 to-orange-500
+//                        shadow-lg tracking-wide"
+//           >
+//             {loading ? "Logging in..." : "Login"}
+//           </motion.button>
+//         </motion.form>
+//       </motion.div>
+//     </div>
+//   );
+// }
+
+
+
 
 // src/superadmin/pages/SuperAdminLogin.jsx
 

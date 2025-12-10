@@ -1,3 +1,27 @@
+// // src/pages/Success/Success.jsx
+// import { Link } from "react-router-dom";
+
+// export default function Success() {
+//   return (
+//     <div className="flex flex-col items-center justify-center min-h-[70vh] text-center p-6">
+//       <h1 className="text-3xl font-bold text-green-600 mb-4">
+//         🎉 Order Successful!
+//       </h1>
+//       <p className="text-gray-600 mb-6">
+//         Thank you for your order. Your food is on the way 🚀
+//       </p>
+//       <Link
+//         to="/orders"
+//         className="px-6 py-3 rounded-lg bg-primary text-white hover:opacity-90"
+//       >
+//         View Orders
+//       </Link>
+//     </div>
+//   );
+// }
+
+
+
 
 // src/pages/Payment/Success.jsx
 

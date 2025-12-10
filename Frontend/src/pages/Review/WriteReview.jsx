@@ -1,3 +1,184 @@
+// import { useState, useEffect } from "react";
+// import { motion, AnimatePresence } from "framer-motion";
+// import { X, Star } from "lucide-react";
+// import toast from "react-hot-toast";
+
+// import {
+//   createReview,
+//   updateReview,
+//   deleteReviewApi,
+//   getReviewsByOrderId,
+// } from "../../api/api";
+
+// export default function WriteReview({ order, user, open, onClose }) {
+//   const [rating, setRating] = useState(0);
+//   const [hover, setHover] = useState(0);
+//   const [comment, setComment] = useState("");
+//   const [reviewId, setReviewId] = useState(null);
+
+//   const userId = user?.email; // email as userId
+
+//   /* =============================================================
+//       🔥 Load existing review if already submitted (ORDER-BASED)
+//      ============================================================= */
+//   useEffect(() => {
+//     if (!open || !order) return;
+
+//     const loadReview = async () => {
+//       try {
+//         const res = await getReviewsByOrderId(order.orderId);
+//         const allReviews = res?.data || [];
+
+//         const myReview = allReviews.find(
+//           (r) => r.userId === userId && r.orderId === order.orderId
+//         );
+
+//         if (myReview) {
+//           setRating(myReview.rating);
+//           setComment(myReview.comment);
+//           setReviewId(myReview.id);
+//         } else {
+//           setRating(0);
+//           setComment("");
+//           setReviewId(null);
+//         }
+//       } catch (err) {
+//         console.error(err);
+//         setRating(0);
+//         setComment("");
+//         setReviewId(null);
+//       }
+//     };
+
+//     loadReview();
+//   }, [open, order, userId]);
+
+//   /* =============================================================
+//       🔥 Submit or Update Review
+//      ============================================================= */
+//   const handleSubmit = async () => {
+//     if (!rating) return toast.error("Please select a rating ⭐");
+
+//     const payload = {
+//       userId,
+//       orderId: order.orderId,
+//       rating,
+//       comment,
+//     };
+
+//     try {
+//       if (reviewId) {
+//         await updateReview(reviewId, payload);
+//         toast.success("Review updated!");
+//       } else {
+//         await createReview(payload);
+//         toast.success("Review submitted!");
+//       }
+//       onClose();
+//     } catch (err) {
+//       console.error(err);
+//       toast.error("Failed to submit review ❌");
+//     }
+//   };
+
+//   /* =============================================================
+//       🔥 Delete Review
+//      ============================================================= */
+//   const handleDelete = async () => {
+//     if (!reviewId) return;
+
+//     try {
+//       await deleteReviewApi(reviewId);
+//       toast.success("Review deleted");
+//       onClose();
+//     } catch {
+//       toast.error("Delete failed ❌");
+//     }
+//   };
+
+//   /* =============================================================
+//       🔥 UI
+//      ============================================================= */
+//   return (
+//     <AnimatePresence>
+//       {open && (
+//         <motion.div
+//           className="fixed inset-0 bg-black/40 backdrop-blur-sm z-50 flex items-center justify-center"
+//           initial={{ opacity: 0 }}
+//           animate={{ opacity: 1 }}
+//           exit={{ opacity: 0 }}
+//         >
+//           <motion.div
+//             className="bg-white w-full max-w-md rounded-2xl shadow-2xl p-6 relative"
+//             initial={{ scale: 0.85, opacity: 0 }}
+//             animate={{ scale: 1, opacity: 1 }}
+//             exit={{ scale: 0.8, opacity: 0 }}
+//           >
+//             <button
+//               onClick={onClose}
+//               className="absolute right-4 top-4 text-slate-500 hover:text-slate-700"
+//             >
+//               <X className="w-5 h-5" />
+//             </button>
+
+//             <h2 className="text-xl font-bold mb-1 text-slate-900">
+//               {reviewId ? "Edit Your Review" : "Write a Review"}
+//             </h2>
+//             <p className="text-xs text-slate-500 mb-3">
+//               Order #{order?.orderId} • {order?.items?.[0]?.mealName}
+//             </p>
+
+//             <div className="flex gap-2 mt-3 mb-4">
+//               {[1, 2, 3, 4, 5].map((st) => (
+//                 <Star
+//                   key={st}
+//                   className={`w-8 h-8 cursor-pointer transition ${
+//                     (hover || rating) >= st
+//                       ? "text-yellow-400 fill-yellow-400 drop-shadow"
+//                       : "text-slate-300"
+//                   }`}
+//                   onMouseEnter={() => setHover(st)}
+//                   onMouseLeave={() => setHover(0)}
+//                   onClick={() => setRating(st)}
+//                 />
+//               ))}
+//             </div>
+
+//             <textarea
+//               value={comment}
+//               onChange={(e) => setComment(e.target.value)}
+//               placeholder="Share your experience..."
+//               rows={4}
+//               className="w-full border p-3 rounded-lg text-sm focus:ring focus:ring-rose-200"
+//             />
+
+//             <div className="flex justify-between mt-6">
+//               {reviewId && (
+//                 <button
+//                   onClick={handleDelete}
+//                   className="px-4 py-2 rounded-lg bg-gray-100 text-gray-700 hover:bg-gray-200"
+//                 >
+//                   Delete
+//                 </button>
+//               )}
+
+//               <button
+//                 onClick={handleSubmit}
+//                 className="px-5 py-2 rounded-lg bg-rose-500 text-white font-semibold shadow hover:bg-rose-600"
+//               >
+//                 {reviewId ? "Update Review" : "Submit Review"}
+//               </button>
+//             </div>
+//           </motion.div>
+//         </motion.div>
+//       )}
+//     </AnimatePresence>
+//   );
+// }
+
+
+
+
 
 
 import { useState, useEffect } from "react";

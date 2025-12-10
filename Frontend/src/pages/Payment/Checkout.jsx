@@ -1,3 +1,368 @@
+// import { useEffect, useState, useMemo } from "react";
+// import { useNavigate } from "react-router-dom";
+// import { motion } from "framer-motion";
+// import toast from "react-hot-toast";
+
+// import { useCart } from "../../context/CartContext";
+// import { useAuth } from "../../context/AuthContext";
+
+// import {
+//   getAllAddresses,
+//   getSubscriptionById,
+//   checkoutOrder,
+//   clearUserCart,
+// } from "../../api/api";
+
+// import {
+//   MapPin,
+//   ClipboardList,
+//   ShoppingBag,
+//   BadgePercent,
+//   CreditCard,
+// } from "lucide-react";
+
+// export default function Checkout() {
+//   const navigate = useNavigate();
+
+//   const { items, totalPrice, clear, loadCart } = useCart();
+//   const { user: authUser } = useAuth();
+
+//   const [addresses, setAddresses] = useState([]);
+//   const [selectedAddressId, setSelectedAddressId] = useState(null);
+//   const [notes, setNotes] = useState("");
+//   const [loading, setLoading] = useState(true);
+//   const [placingOrder, setPlacingOrder] = useState(false);
+
+//   const [subscription, setSubscription] = useState(null);
+//   const [discountAmount, setDiscountAmount] = useState(0);
+
+//   const userFullName = authUser?.fullName || authUser?.name || "User";
+//   const userPhone = authUser?.phone || authUser?.mobile || "0000000000";
+
+//   const totalItems = useMemo(
+//     () => items.reduce((sum, it) => sum + Number(it.quantity || 0), 0),
+//     [items]
+//   );
+
+//   /* -------------------------------------------------------------
+//      INITIAL LOAD
+//   -------------------------------------------------------------- */
+//   useEffect(() => {
+//     const init = async () => {
+//       try {
+//         setLoading(true);
+
+//         await loadCart();
+
+//         // Fetch addresses
+//         const res = await getAllAddresses();
+//         const list = res.data || [];
+//         setAddresses(list);
+
+//         if (list.length > 0) {
+//           setSelectedAddressId(list[0].id);
+//         }
+
+//         // Fetch subscription
+//         if (authUser?.subscriptionId) {
+//           const subRes = await getSubscriptionById(authUser.subscriptionId);
+//           setSubscription(subRes.data);
+
+//           if (subRes.data?.discountPercent) {
+//             const disc = (totalPrice * subRes.data.discountPercent) / 100;
+//             setDiscountAmount(Math.round(disc));
+//           }
+//         }
+//       } catch (err) {
+//         console.error(err);
+//         toast.error("Checkout load karte waqt error ❌");
+//       } finally {
+//         setLoading(false);
+//       }
+//     };
+//     init();
+//   }, []);
+
+//   /* -------------------------------------------------------------
+//      Helper → Format address
+//   -------------------------------------------------------------- */
+//   const formatAddress = (a) => {
+//     if (!a) return "";
+//     return [
+//       a.flatNoOrBuildingName,
+//       a.street,
+//       a.landmark,
+//       `${a.city}, ${a.state} - ${a.pincode}`,
+//     ]
+//       .filter(Boolean)
+//       .join(", ");
+//   };
+
+//   /* -------------------------------------------------------------
+//      PLACE ORDER
+//   -------------------------------------------------------------- */
+//   const handlePlaceOrder = async () => {
+//     if (!items.length) {
+//       toast.error("Cart is empty ❌");
+//       return navigate("/cuisine");
+//     }
+
+//     if (!selectedAddressId) {
+//       toast.error("Delivery address select karo 📍");
+//       return;
+//     }
+
+//     const selectedAddress = addresses.find((a) => a.id === selectedAddressId);
+//     const addressString = formatAddress(selectedAddress);
+
+//     const payload = {
+//       userId: authUser?.email || "UNKNOWN_USER",
+//       customerName: userFullName,
+//       customerPhoneNumber: userPhone,
+//       address: addressString,
+
+//       orderType: subscription ? "SUBSCRIPTION" : "ONE_TIME",
+//       subscriptionId: subscription?.id || null,
+
+//       appliedDiscount: discountAmount,
+//       notes: notes || "",
+
+//       items: items.map((it) => ({
+//         mealName: it.foodName,
+//         quantity: Number(it.quantity),
+//         pricePerItem: Number(it.price),
+//         customizations: "",
+//       })),
+//     };
+
+//     try {
+//       setPlacingOrder(true);
+
+//       const res = await checkoutOrder(payload);
+//       toast.success("Order placed successfully 🎉");
+
+//       // 1️⃣ Backend clear
+//       try {
+//         await clearUserCart();
+//       } catch (e) {
+//         console.log("Backend cart clear failed, but continuing...");
+//       }
+
+//       // 2️⃣ Frontend clear
+//       clear();
+
+//       // 3️⃣ Redirect
+//       const orderId = res.data?.orderId || res.data?.order?.id;
+//       navigate(`/success?orderId=${orderId}`);
+//     } catch (err) {
+//       console.error(err);
+//       toast.error("Order place karte waqt kuch galat ho gaya ❌");
+//     } finally {
+//       setPlacingOrder(false);
+//     }
+//   };
+
+//   /* ------------------ EMPTY CART UI ------------------ */
+//   if (!loading && items.length === 0) {
+//     return (
+//       <div className="min-h-[70vh] flex flex-col items-center justify-center px-4">
+//         <ShoppingBag className="w-16 h-16 text-gray-300 mb-4" />
+//         <h2 className="text-2xl font-bold mb-2">Your cart is empty</h2>
+//         <p className="text-gray-600 mb-6 text-center max-w-md">
+//           Add delicious meals to continue.
+//         </p>
+//         <button
+//           onClick={() => navigate("/cuisine")}
+//           className="px-6 py-3 rounded-full bg-[#E23744] text-white font-semibold shadow-lg"
+//         >
+//           Browse Cuisines
+//         </button>
+//       </div>
+//     );
+//   }
+
+//   /* -------------------------------------------------------------
+//      MAIN PAGE UI
+//   -------------------------------------------------------------- */
+//   return (
+//     <div className="min-h-screen bg-gradient-to-b from-white via-red-50/30 to-white py-8 px-4 md:px-8 lg:px-14">
+//       {/* STEP INDICATOR */}
+//       <motion.div
+//         initial={{ opacity: 0, y: -10 }}
+//         animate={{ opacity: 1, y: 0 }}
+//         className="mb-8"
+//       >
+//         <div className="flex items-center justify-center gap-4 text-sm font-medium text-gray-600">
+//           <div className="flex items-center gap-2">
+//             <span className="w-7 h-7 rounded-full bg-emerald-500 text-white flex items-center justify-center text-xs font-bold">
+//               1
+//             </span>
+//             <span>Cart</span>
+//           </div>
+
+//           <div className="h-px w-10 bg-gray-300" />
+
+//           <div className="flex items-center gap-2">
+//             <span className="w-7 h-7 rounded-full bg-[#E23744] text-white flex items-center justify-center text-xs font-bold shadow-md">
+//               2
+//             </span>
+//             <span className="text-[#E23744]">Checkout</span>
+//           </div>
+
+//           <div className="h-px w-10 bg-gray-300" />
+
+//           <div className="flex items-center gap-2">
+//             <span className="w-7 h-7 rounded-full bg-gray-200 text-gray-500 flex items-center justify-center text-xs font-bold">
+//               3
+//             </span>
+//             <span>Success</span>
+//           </div>
+//         </div>
+//       </motion.div>
+
+//       {/* GRID LAYOUT */}
+//       <div className="grid lg:grid-cols-[1.4fr_1fr] gap-6 max-w-6xl mx-auto">
+//         {/* ---------------- LEFT: Address + Notes ---------------- */}
+//         <motion.div
+//           initial={{ opacity: 0, x: -20 }}
+//           animate={{ opacity: 1, x: 0 }}
+//           className="space-y-6"
+//         >
+//           {/* ADDRESS BOX */}
+//           <div className="bg-white rounded-2xl border shadow-lg p-6">
+//             <div className="flex items-center gap-2 mb-4">
+//               <MapPin className="w-6 h-6 text-[#E23744]" />
+//               <h2 className="text-lg font-semibold">Delivery Address</h2>
+//             </div>
+
+//             {addresses.length === 0 ? (
+//               <p>No saved addresses found.</p>
+//             ) : (
+//               <div className="space-y-3">
+//                 {addresses.map((a) => (
+//                   <button
+//                     onClick={() => setSelectedAddressId(a.id)}
+//                     key={a.id}
+//                     className={`w-full text-left border rounded-xl p-4 ${
+//                       selectedAddressId === a.id
+//                         ? "border-[#E23744] bg-red-50"
+//                         : "border-gray-200"
+//                     }`}
+//                   >
+//                     <p className="font-semibold">{a.flatNoOrBuildingName}</p>
+//                     <p className="text-xs text-gray-600">
+//                       {formatAddress(a)}
+//                     </p>
+//                   </button>
+//                 ))}
+//               </div>
+//             )}
+//           </div>
+
+//           {/* NOTES */}
+//           <div className="bg-white rounded-2xl border shadow-lg p-6">
+//             <div className="flex items-center gap-2 mb-2">
+//               <ClipboardList className="w-5 h-5 text-[#E23744]" />
+//               <h2 className="font-semibold text-lg">Order Notes</h2>
+//             </div>
+
+//             <textarea
+//               value={notes}
+//               onChange={(e) => setNotes(e.target.value)}
+//               placeholder="No onion, no garlic, ring bell once..."
+//               className="w-full border rounded-xl p-3 text-sm focus:ring-[#E23744]"
+//               rows={3}
+//             />
+//           </div>
+//         </motion.div>
+
+//         {/* ---------------- RIGHT: SUMMARY + PAY ---------------- */}
+//         <motion.div
+//           initial={{ opacity: 0, x: 20 }}
+//           animate={{ opacity: 1, x: 0 }}
+//           className="space-y-5"
+//         >
+//           {/* ORDER SUMMARY */}
+//           <div className="bg-white rounded-3xl border shadow-xl p-6">
+//             <div className="flex items-center gap-2 mb-3">
+//               <ShoppingBag className="w-6 h-6 text-[#E23744]" />
+//               <h2 className="text-lg font-semibold">Order Summary</h2>
+//             </div>
+
+//             <div className="space-y-3 max-h-56 overflow-y-auto pr-1">
+//               {items.map((it) => (
+//                 <div
+//                   key={it.foodId}
+//                   className="flex justify-between border-b pb-2"
+//                 >
+//                   <div>
+//                     <p className="font-medium">{it.foodName}</p>
+//                     <p className="text-xs text-gray-500">
+//                       Qty: {it.quantity}
+//                     </p>
+//                   </div>
+//                   <p className="font-semibold">
+//                     ₹{Number(it.price) * Number(it.quantity)}
+//                   </p>
+//                 </div>
+//               ))}
+//             </div>
+
+//             {/* BILLING */}
+//             <div className="mt-4 border-t pt-3 space-y-2 text-sm">
+//               <div className="flex justify-between">
+//                 <span>Items Total</span>
+//                 <span>₹{totalPrice.toFixed(2)}</span>
+//               </div>
+
+//               {subscription && (
+//                 <div className="flex justify-between text-emerald-700">
+//                   <span className="flex items-center gap-1">
+//                     <BadgePercent className="w-4 h-4" />
+//                     Subscription Discount ({subscription.discountPercent}%)
+//                   </span>
+//                   <span>-₹{discountAmount}</span>
+//                 </div>
+//               )}
+
+//               <div className="flex justify-between font-bold pt-2 text-lg">
+//                 <span>Grand Total</span>
+//                 <span>₹{(totalPrice - discountAmount).toFixed(2)}</span>
+//               </div>
+//             </div>
+//           </div>
+
+//           {/* PAYMENT BOX */}
+//           <div className="bg-gradient-to-r from-[#E23744] to-red-500 rounded-3xl p-6 text-white shadow-xl">
+//             <div className="flex items-center gap-2 mb-3">
+//               <CreditCard className="w-5 h-5" />
+//               <p className="text-sm font-semibold uppercase">Payment</p>
+//             </div>
+
+//             <h3 className="text-lg font-bold">Cash on Delivery</h3>
+//             <p className="text-xs mb-4 opacity-80">
+//               UPI / Online Payments coming soon.
+//             </p>
+
+//             <button
+//               onClick={handlePlaceOrder}
+//               disabled={placingOrder}
+//               className="w-full bg-white text-[#E23744] rounded-full py-3 text-sm font-semibold shadow-lg"
+//             >
+//               {placingOrder ? "Placing order..." : "Confirm & Place Order"}
+//             </button>
+//           </div>
+//         </motion.div>
+//       </div>
+//     </div>
+//   );
+// }
+
+
+
+
+
+
 
 import React, { useEffect, useState, useMemo } from "react";
 import { useNavigate } from "react-router-dom";

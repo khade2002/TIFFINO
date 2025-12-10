@@ -1,3 +1,140 @@
+// // src/admin/pages/AdminForgotPassword.jsx
+// import React, { useState } from "react";
+// import { motion } from "framer-motion";
+// import { Mail, ArrowLeft, Shield } from "lucide-react";
+// import toast from "react-hot-toast";
+// import { useNavigate } from "react-router-dom";
+// import { adminForgotPassword } from "../../api/api";
+
+// export default function AdminForgotPassword() {
+//   const [email, setEmail] = useState("");
+//   const [busy, setBusy] = useState(false);
+//   const nav = useNavigate();
+
+//   const submit = async (e) => {
+//     e.preventDefault();
+//     if (!email.trim()) return toast.error("Enter your email");
+
+//     setBusy(true);
+//     try {
+//       const res = await adminForgotPassword(email);
+//       toast.success(res?.data || "Temporary password sent");
+
+//       setTimeout(() => nav("/admin/login"), 900);
+//     } catch (err) {
+//       toast.error(err?.response?.data || "Failed to send temporary password");
+//     } finally {
+//       setBusy(false);
+//     }
+//   };
+
+//   return (
+//     <div className="relative min-h-screen w-full overflow-hidden flex items-center justify-center bg-gradient-to-br from-red-50/40 to-gray-50/60 px-4">
+
+//       {/* Decorative Floating Blobs */}
+//       <motion.div
+//         className="absolute top-20 left-10 w-72 h-72 bg-[#E23744]/20 rounded-full blur-3xl"
+//         animate={{ y: [0, -30, 0], opacity: [0.3, 0.55, 0.3] }}
+//         transition={{ duration: 12, repeat: Infinity }}
+//       />
+//       <motion.div
+//         className="absolute bottom-16 right-10 w-72 h-72 bg-[#E23744]/25 rounded-full blur-3xl"
+//         animate={{ y: [0, 35, 0], opacity: [0.4, 0.7, 0.4] }}
+//         transition={{ duration: 14, repeat: Infinity }}
+//       />
+
+//       {/* Card */}
+//       <motion.div
+//         initial={{ opacity: 0, y: 40, scale: 0.94 }}
+//         animate={{ opacity: 1, y: 0, scale: 1 }}
+//         transition={{ duration: 0.35 }}
+//         className="w-full max-w-md bg-white/70 backdrop-blur-2xl border border-white/40 shadow-2xl rounded-3xl p-8 relative z-10"
+//       >
+//         {/* Badge */}
+//         <div className="flex justify-center mb-6">
+//           <motion.div
+//             whileHover={{ scale: 1.05 }}
+//             className="rounded-full px-4 py-2 bg-[#E23744] text-white font-medium text-sm shadow-lg flex items-center gap-2"
+//           >
+//             <Shield className="w-4 h-4" />
+//             Admin Access
+//           </motion.div>
+//         </div>
+
+//         {/* Title */}
+//         <h2 className="text-2xl font-extrabold text-center text-gray-900">
+//           Forgot Password
+//         </h2>
+
+//         <p className="text-center text-gray-600 text-sm mt-1 mb-6">
+//           Enter your registered admin email to receive a temporary password.
+//         </p>
+
+//         <form onSubmit={submit} className="space-y-5">
+
+//           {/* Email */}
+//           <div>
+//             <label className="text-sm font-semibold text-gray-700">
+//               Email Address
+//             </label>
+
+//             <div className="relative">
+//               <Mail className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+
+//               <input
+//                 value={email}
+//                 onChange={(e) => setEmail(e.target.value)}
+//                 placeholder="admin@example.com"
+//                 className="
+//                   w-full pl-10 pr-3 py-3 
+//                   bg-white/60 backdrop-blur-xl 
+//                   border border-gray-300 rounded-xl 
+//                   focus:ring-2 focus:ring-[#E23744] 
+//                   outline-none transition
+//                 "
+//                 type="email"
+//               />
+//             </div>
+//           </div>
+
+//           {/* Action Buttons */}
+//           <div className="flex gap-3">
+
+//             {/* SEND BUTTON */}
+//             <motion.button
+//               whileHover={{ scale: 1.02 }}
+//               whileTap={{ scale: 0.96 }}
+//               disabled={busy}
+//               className="
+//                 flex-1 py-3 rounded-xl font-semibold text-white 
+//                 bg-[#E23744] shadow-lg hover:shadow-[#E23744]/40 
+//                 transition
+//               "
+//             >
+//               {busy ? "Sending..." : "Send"}
+//             </motion.button>
+
+//             {/* BACK */}
+//             <motion.button
+//               type="button"
+//               whileTap={{ scale: 0.96 }}
+//               onClick={() => nav("/admin/login")}
+//               className="
+//                 px-4 py-3 rounded-xl border bg-white 
+//                 font-medium flex items-center gap-2 
+//                 text-gray-700 shadow-sm hover:bg-gray-50 transition
+//               "
+//             >
+//               <ArrowLeft className="w-4 h-4" />
+//               Back
+//             </motion.button>
+//           </div>
+//         </form>
+//       </motion.div>
+//     </div>
+//   );
+// }
+
 
 
 import React, { useState, useRef, useEffect } from "react";

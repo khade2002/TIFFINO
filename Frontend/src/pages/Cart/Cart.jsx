@@ -1,3 +1,398 @@
+// import { useEffect, useState } from "react";
+// import { Trash2, Plus, Minus } from "lucide-react";
+// import toast from "react-hot-toast";
+// import { useNavigate } from "react-router-dom";
+
+// import {
+//   getCartItems,
+//   updateCartItem,
+//   removeCartItem,
+//   getCartTotal,
+// } from "../../api/api";
+
+// export default function Cart() {
+//   const [items, setItems] = useState([]);
+//   const [totalPrice, setTotalPrice] = useState(0);
+//   const navigate = useNavigate();
+
+//   // ============================
+//   // LOAD CART
+//   // ============================
+//   const loadCart = async () => {
+//     try {
+//       const res = await getCartItems();
+//       setItems(res.data || []);
+
+//       const totalRes = await getCartTotal();
+//       setTotalPrice(totalRes.data || 0);
+//     } catch (err) {
+//       console.error("Cart load error:", err);
+//       toast.error("Failed to load cart ❌");
+//     }
+//   };
+
+//   useEffect(() => {
+//     loadCart();
+//   }, []);
+
+//   // ============================
+//   // QUANTITY UPDATE
+//   // ============================
+//   const increment = async (foodId) => {
+//     try {
+//       const item = items.find((i) => i.foodId === foodId);
+//       if (!item) return;
+
+//       await handleQtyUpdate(foodId, Number(item.quantity) + 1);
+//     } catch {
+//       toast.error("Error updating quantity ❌");
+//     }
+//   };
+
+//   const decrement = async (foodId) => {
+//     try {
+//       const item = items.find((i) => i.foodId === foodId);
+//       if (!item || item.quantity <= 1) return;
+
+//       await handleQtyUpdate(foodId, Number(item.quantity) - 1);
+//     } catch {
+//       toast.error("Error updating quantity ❌");
+//     }
+//   };
+
+//   const handleQtyUpdate = async (foodId, quantity) => {
+//     try {
+//       await updateCartItem(String(foodId), Number(quantity));
+//       toast.success("Quantity Updated ✔");
+//       loadCart();
+//     } catch (err) {
+//       console.error("Update error:", err);
+//       toast.error("Failed to update quantity ❌");
+//     }
+//   };
+
+//   // ============================
+//   // REMOVE ITEM
+//   // ============================
+//   const removeItem = async (foodId) => {
+//     try {
+//       await removeCartItem(String(foodId));
+//       toast.success("Item removed 🗑️");
+//       loadCart();
+//     } catch (err) {
+//       console.error("Remove error:", err);
+//       toast.error("Failed to remove item ❌");
+//     }
+//   };
+
+//   // ============================
+//   // EMPTY CART UI
+//   // ============================
+//   if (items.length === 0) {
+//     return (
+//       <div className="min-h-[70vh] flex items-center justify-center text-gray-600 text-lg">
+//         Your cart is empty 🛒
+//       </div>
+//     );
+//   }
+
+//   return (
+//     <div className="max-w-4xl mx-auto p-6">
+//       <h2 className="text-2xl font-bold mb-6">Your Cart</h2>
+
+//       {/* Cart Items */}
+//       <div className="space-y-4">
+//         {items.map((item) => (
+//           <div
+//             key={item.foodId}
+//             className="flex items-center justify-between bg-white p-4 rounded-xl shadow"
+//           >
+//             {/* Image + Info */}
+//             <div className="flex items-center gap-4">
+//               <img
+//                 src={item.imageUrl || "https://via.placeholder.com/80"}
+//                 alt={item.foodName}
+//                 className="w-16 h-16 rounded-lg object-cover"
+//               />
+//               <div>
+//                 <h3 className="font-semibold">{item.foodName}</h3>
+//                 <p className="text-gray-500">₹{item.price}</p>
+//               </div>
+//             </div>
+
+//             {/* Qty Controls */}
+//             <div className="flex items-center gap-3">
+//               <button
+//                 onClick={() => decrement(item.foodId)}
+//                 className="bg-gray-200 p-1 rounded"
+//               >
+//                 <Minus />
+//               </button>
+//               <span>{item.quantity}</span>
+//               <button
+//                 onClick={() => increment(item.foodId)}
+//                 className="bg-gray-200 p-1 rounded"
+//               >
+//                 <Plus />
+//               </button>
+//             </div>
+
+//             {/* Price + Remove */}
+//             <div className="flex items-center gap-6">
+//               <span className="font-semibold">
+//                 ₹{Number(item.price) * Number(item.quantity)}
+//               </span>
+//               <button
+//                 onClick={() => removeItem(item.foodId)}
+//                 className="text-red-500"
+//               >
+//                 <Trash2 />
+//               </button>
+//             </div>
+//           </div>
+//         ))}
+//       </div>
+
+//       {/* Summary */}
+//       <div className="mt-6 bg-white p-6 rounded-xl shadow-lg">
+//         <div className="flex justify-between text-lg font-semibold">
+//           <span>Total Price:</span>
+//           <span>₹{totalPrice}</span>
+//         </div>
+
+//         <button
+//           onClick={() => navigate("/checkout")}
+//           className="mt-6 w-full bg-green-500 hover:bg-green-600 text-white py-3 rounded-xl font-bold"
+//         >
+//           Checkout
+//         </button>
+//       </div>
+//     </div>
+//   );
+// }
+
+
+
+// import { useEffect, useState } from "react";
+// import { Trash2, Plus, Minus, ShoppingBag, Sparkles } from "lucide-react";
+// import toast from "react-hot-toast";
+// import { useNavigate } from "react-router-dom";
+
+// import {
+//   getCartItems,
+//   updateCartItem,
+//   removeCartItem,
+//   getCartTotal,
+// } from "../../api/api";
+
+// export default function Cart() {
+//   const [items, setItems] = useState([]);
+//   const [totalPrice, setTotalPrice] = useState(0);
+
+//   // Subscription Discount Handling (future integration ready)
+//   const activeSubscriptionId = localStorage.getItem("activeSubscriptionId");
+//   const [discountApplied, setDiscountApplied] = useState(false);
+
+//   const navigate = useNavigate();
+
+//   // ============================
+//   // LOAD CART
+//   // ============================
+//   const loadCart = async () => {
+//     try {
+//       const res = await getCartItems();
+//       setItems(res.data || []);
+
+//       const totalRes = await getCartTotal();
+//       setTotalPrice(totalRes.data || 0);
+
+//       if (activeSubscriptionId) {
+//         // Just UI indication, backend discount will apply during order
+//         setDiscountApplied(true);
+//       }
+//     } catch (err) {
+//       console.error("Cart load error:", err);
+//       toast.error("Failed to load cart ❌");
+//     }
+//   };
+
+//   useEffect(() => {
+//     loadCart();
+//   }, []);
+
+//   // ============================
+//   // QUANTITY UPDATE
+//   // ============================
+//   const handleQtyUpdate = async (foodId, quantity) => {
+//     try {
+//       await updateCartItem(String(foodId), Number(quantity));
+//       loadCart();
+//     } catch (err) {
+//       console.error("Update error:", err);
+//       toast.error("Failed to update quantity ❌");
+//     }
+//   };
+
+//   const increment = (foodId) => {
+//     const item = items.find((i) => i.foodId === foodId);
+//     if (!item) return;
+//     handleQtyUpdate(foodId, Number(item.quantity) + 1);
+//   };
+
+//   const decrement = (foodId) => {
+//     const item = items.find((i) => i.foodId === foodId);
+//     if (!item || item.quantity <= 1) return;
+//     handleQtyUpdate(foodId, Number(item.quantity) - 1);
+//   };
+
+//   // ============================
+//   // REMOVE ITEM
+//   // ============================
+//   const removeItemHandler = async (foodId) => {
+//     try {
+//       await removeCartItem(String(foodId));
+//       toast.success("Item removed 🗑️");
+//       loadCart();
+//     } catch {
+//       toast.error("Failed to remove item ❌");
+//     }
+//   };
+
+//   // ============================
+//   // EMPTY CART SCREEN (PREMIUM)
+//   // ============================
+//   if (items.length === 0) {
+//     return (
+//       <div className="min-h-[75vh] flex flex-col items-center justify-center text-center px-4">
+//         <ShoppingBag className="w-20 h-20 text-gray-400 mb-4" />
+//         <h2 className="text-2xl font-bold text-gray-700 mb-2">
+//           Your Cart is Empty
+//         </h2>
+//         <p className="text-gray-500 mb-6 max-w-sm">
+//           Add your favourite meals and we’ll bring them hot & fresh!
+//         </p>
+
+//         <button
+//           onClick={() => navigate("/")}
+//           className="px-6 py-3 bg-[#E23744] text-white rounded-full shadow-lg hover:shadow-[#E23744]/40 transition-all font-bold"
+//         >
+//           Explore Meals
+//         </button>
+//       </div>
+//     );
+//   }
+
+//   return (
+//     <div className="max-w-4xl mx-auto p-6 min-h-screen">
+//       {/* HEADER */}
+//       <div className="mb-8 flex justify-between items-center">
+//         <h2 className="text-3xl font-bold text-gray-900 flex items-center gap-2">
+//           <Sparkles className="text-[#E23744]" />
+//           Your Cart
+//         </h2>
+
+//         {discountApplied && (
+//           <div className="px-4 py-1 rounded-full bg-emerald-100 text-emerald-700 text-sm font-semibold border border-emerald-300">
+//             Subscription Discount Active
+//           </div>
+//         )}
+//       </div>
+
+//       {/* CART ITEMS */}
+//       <div className="space-y-5">
+//         {items.map((item) => (
+//           <div
+//             key={item.foodId}
+//             className="bg-white rounded-2xl shadow-md p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-4 hover:shadow-xl transition-all"
+//           >
+//             {/* Left — Image + Details */}
+//             <div className="flex items-center gap-4">
+//               <img
+//                 src={
+//                   item.imageUrl ||
+//                   `https://source.unsplash.com/400x300/?food,${item.foodName}`
+//                 }
+//                 alt={item.foodName}
+//                 className="w-20 h-20 rounded-xl object-cover shadow"
+//               />
+
+//               <div>
+//                 <h3 className="text-lg font-semibold">{item.foodName}</h3>
+//                 <p className="text-gray-500 text-sm">₹{item.price}</p>
+//               </div>
+//             </div>
+
+//             {/* Middle — Qty */}
+//             <div className="flex items-center gap-3">
+//               <button
+//                 onClick={() => decrement(item.foodId)}
+//                 className="p-2 bg-gray-100 rounded-full hover:bg-gray-200 transition"
+//               >
+//                 <Minus size={18} />
+//               </button>
+
+//               <span className="font-semibold">{item.quantity}</span>
+
+//               <button
+//                 onClick={() => increment(item.foodId)}
+//                 className="p-2 bg-gray-100 rounded-full hover:bg-gray-200 transition"
+//               >
+//                 <Plus size={18} />
+//               </button>
+//             </div>
+
+//             {/* Right — Price + Remove */}
+//             <div className="flex items-center gap-6">
+//               <span className="text-xl font-bold text-gray-800">
+//                 ₹{item.price * item.quantity}
+//               </span>
+
+//               <button
+//                 onClick={() => removeItemHandler(item.foodId)}
+//                 className="text-red-500 hover:text-red-700 transition"
+//               >
+//                 <Trash2 size={22} />
+//               </button>
+//             </div>
+//           </div>
+//         ))}
+//       </div>
+
+//       {/* SUMMARY CARD */}
+//       <div className="mt-10 bg-white rounded-3xl shadow-xl p-6 border border-gray-100">
+//         <h3 className="text-xl font-semibold mb-4">Order Summary</h3>
+
+//         <div className="flex justify-between text-lg mb-1">
+//           <span>Subtotal</span>
+//           <span>₹{totalPrice}</span>
+//         </div>
+
+//         {discountApplied && (
+//           <div className="flex justify-between text-green-600 font-semibold text-sm mb-1">
+//             <span>Subscription Discount</span>
+//             <span>Auto Applied ✓</span>
+//           </div>
+//         )}
+
+//         <div className="mt-4 h-px bg-gray-200"></div>
+
+//         <div className="flex justify-between text-xl font-bold mt-4">
+//           <span>Total</span>
+//           <span>₹{totalPrice}</span>
+//         </div>
+
+//         <button
+//           onClick={() => navigate("/checkout")}
+//           className="mt-6 w-full bg-[#E23744] text-white py-3 rounded-full text-lg font-bold shadow-lg hover:shadow-[#E23744]/40 hover:-translate-y-0.5 transition-all"
+//         >
+//           Proceed to Checkout →
+//         </button>
+//       </div>
+//     </div>
+//   );
+// }
+
+
 
 import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";

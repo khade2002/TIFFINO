@@ -1,3 +1,315 @@
+// import { useState, useRef } from "react";
+// import { motion } from "framer-motion";
+// import { Link, useNavigate } from "react-router-dom";
+// import toast from "react-hot-toast";
+
+// import { forgotPassword, resetPassword } from "../../api/api";
+// import { Mail, Key, Eye, EyeOff, Sparkles, ShieldCheck } from "lucide-react";
+
+// export default function ForgotPassword() {
+//   const navigate = useNavigate();
+
+//   const [email, setEmail] = useState("");
+//   const [otpSent, setOtpSent] = useState(false);
+
+//   const [otp, setOtp] = useState("");
+//   const [shake, setShake] = useState(false);
+
+//   const [password, setPassword] = useState("");
+//   const [confirmPassword, setConfirmPassword] = useState("");
+
+//   const [loading, setLoading] = useState(false);
+
+//   const otpRefs = useRef([]);
+//   const passwordRef = useRef(null);
+
+//   const otpLength = 6;
+
+//   const triggerShake = () => {
+//     setShake(true);
+//     setTimeout(() => setShake(false), 450);
+//   };
+
+//   // ============================
+//   // OTP INPUT LOGIC
+//   // ============================
+//   const handleOtpChange = (value, idx) => {
+//     if (!/^\d?$/.test(value)) return;
+
+//     const arr = otp.padEnd(otpLength, " ").split("");
+//     arr[idx] = value || " ";
+//     const newOtp = arr.join("").trim();
+
+//     setOtp(newOtp);
+
+//     if (value && idx < otpLength - 1) {
+//       otpRefs.current[idx + 1]?.focus();
+//     }
+
+//     if (idx === otpLength - 1 && value) {
+//       setTimeout(() => passwordRef.current?.focus(), 150);
+//     }
+//   };
+
+//   const handleOtpKeyDown = (e, idx) => {
+//     if (e.key === "Backspace") {
+//       const arr = otp.padEnd(otpLength, " ").split("");
+
+//       if (!arr[idx] && idx > 0) {
+//         otpRefs.current[idx - 1]?.focus();
+//       }
+
+//       arr[idx] = " ";
+//       setOtp(arr.join("").trim());
+//     }
+//   };
+
+//   // ============================
+//   // STEP 1 — SEND OTP
+//   // ============================
+//   const handleSendOtp = async (e) => {
+//     e.preventDefault();
+
+//     if (!email.trim()) {
+//       toast.error("Please enter email ❌");
+//       return triggerShake();
+//     }
+
+//     try {
+//       setLoading(true);
+
+//       const res = await forgotPassword(email.trim());
+//       toast.success(res?.data || "OTP sent successfully 📧");
+
+//       setOtp("");
+//       setOtpSent(true);
+
+//       setTimeout(() => otpRefs.current[0]?.focus(), 120);
+//     } catch (err) {
+//       toast.error(err?.response?.data || "Failed to send OTP ❌");
+//     } finally {
+//       setLoading(false);
+//     }
+//   };
+
+//   // ============================
+//   // STEP 2 — RESET PASSWORD
+//   // ============================
+//   const handleReset = async (e) => {
+//     e.preventDefault();
+
+//     if (otp.trim().length < 6) {
+//       toast.error("Enter full 6-digit OTP ❌");
+//       return triggerShake();
+//     }
+
+//     if (!password || !confirmPassword) {
+//       toast.error("Password cannot be empty ❌");
+//       return triggerShake();
+//     }
+
+//     if (password !== confirmPassword) {
+//       toast.error("Passwords do not match ✘");
+//       return triggerShake();
+//     }
+
+//     try {
+//       setLoading(true);
+
+//       const payload = {
+//         email: email.trim(),
+//         otp: otp.trim(),
+//         newPassword: password.trim(),
+//       };
+
+//       const res = await resetPassword(payload);
+//       toast.success(res?.data || "Password reset successfully 🔐");
+
+//       navigate("/login");
+//     } catch (err) {
+//       toast.error(err?.response?.data || "Failed to reset password ❌");
+//     } finally {
+//       setLoading(false);
+//     }
+//   };
+
+//   return (
+//     <div className="min-h-[85vh] flex items-center justify-center bg-gradient-to-b from-white via-red-50/20 to-gray-100 px-4 py-10">
+//       <motion.div
+//         initial={{ opacity: 0, y: 50, scale: 0.96 }}
+//         animate={{ opacity: 1, y: 0, scale: 1 }}
+//         transition={{ duration: 0.55 }}
+//         className="bg-white w-full max-w-md rounded-3xl shadow-2xl border px-8 py-10"
+//       >
+//         {/* Badge */}
+//         <motion.div
+//           initial={{ scale: 0 }}
+//           animate={{ scale: 1 }}
+//           transition={{ type: "spring", delay: 0.1 }}
+//           className="flex justify-center mb-5"
+//         >
+//           <div className="rounded-full bg-[#E23744]/15 px-4 py-2 flex items-center gap-1 text-[#E23744] font-bold text-sm">
+//             <ShieldCheck className="w-4 h-4" />
+//             Secure Reset
+//           </div>
+//         </motion.div>
+
+//         {/* Title */}
+//         <h2 className="text-3xl font-extrabold bg-gradient-to-r from-[#E23744] to-pink-600 bg-clip-text text-transparent text-center mb-8">
+//           Forgot Password 🔐
+//         </h2>
+
+//         {/* ======================
+//              STEP 1 — EMAIL INPUT
+//            ====================== */}
+//         {!otpSent && (
+//           <motion.form
+//             onSubmit={handleSendOtp}
+//             animate={shake ? { x: [-6, 6, -6, 6, 0] } : {}}
+//             className="space-y-6"
+//           >
+//             <div className="relative">
+//               <Mail className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-300 w-5 h-5" />
+//               <input
+//                 type="email"
+//                 placeholder="Registered Email"
+//                 value={email}
+//                 onChange={(e) => setEmail(e.target.value)}
+//                 className="w-full pl-11 pr-3 py-3 rounded-xl border border-gray-300 focus:border-[#E23744] focus:ring-2 focus:ring-[#E23744]/30 outline-none shadow-sm"
+//               />
+//             </div>
+
+//             <button
+//               type="submit"
+//               disabled={loading}
+//               className={`w-full py-3 rounded-xl font-semibold text-white shadow-lg transition-all ${
+//                 loading
+//                   ? "bg-[#E23744]/60 cursor-not-allowed"
+//                   : "bg-gradient-to-r from-[#E23744] to-pink-600 hover:from-pink-600 hover:to-[#E23744]"
+//               }`}
+//             >
+//               {loading ? "Sending OTP..." : "Send OTP"}
+//             </button>
+//           </motion.form>
+//         )}
+
+//         {/* ======================
+//              STEP 2 — OTP + RESET
+//            ====================== */}
+//         {otpSent && (
+//           <motion.form
+//             onSubmit={handleReset}
+//             animate={shake ? { x: [-6, 6, -6, 6, 0] } : {}}
+//             className="space-y-6"
+//           >
+//             <p className="text-center text-gray-700">
+//               OTP sent to <b>{email}</b>
+//             </p>
+
+//             {/* OTP ROW */}
+//             <div className="flex justify-center gap-2 mb-4">
+//               {Array.from({ length: otpLength }).map((_, idx) => (
+//                 <input
+//                   key={idx}
+//                   maxLength={1}
+//                   value={otp[idx] || ""}
+//                   ref={(el) => (otpRefs.current[idx] = el)}
+//                   onChange={(e) => handleOtpChange(e.target.value, idx)}
+//                   onKeyDown={(e) => handleOtpKeyDown(e, idx)}
+//                   inputMode="numeric"
+//                   className="w-12 h-14 rounded-xl border text-center text-2xl font-bold shadow-sm focus:ring-2 focus:ring-[#E23744]/30 outline-none"
+//                 />
+//               ))}
+//             </div>
+
+//             {/* NEW PASSWORD */}
+//             <PasswordField
+//               label="New Password"
+//               value={password}
+//               setValue={setPassword}
+//               inputRef={passwordRef}
+//             />
+
+//             {/* CONFIRM PASSWORD */}
+//             <PasswordField
+//               label="Confirm Password"
+//               value={confirmPassword}
+//               setValue={setConfirmPassword}
+//             />
+
+//             <button
+//               type="submit"
+//               disabled={loading}
+//               className={`w-full py-3 rounded-xl font-semibold text-white shadow-lg transition-all ${
+//                 loading
+//                   ? "bg-[#E23744]/60 cursor-not-allowed"
+//                   : "bg-gradient-to-r from-[#E23744] to-pink-600 hover:from-pink-600 hover:to-[#E23744]"
+//               }`}
+//             >
+//               {loading ? "Resetting..." : "Reset Password"}
+//             </button>
+
+//             <button
+//               type="button"
+//               onClick={() => {
+//                 setOtpSent(false);
+//                 setOtp("");
+//                 setPassword("");
+//                 setConfirmPassword("");
+//               }}
+//               className="text-xs block mx-auto text-gray-500 underline mt-3"
+//             >
+//               Change Email
+//             </button>
+//           </motion.form>
+//         )}
+
+//         {/* Footer Text */}
+//         <p className="text-sm text-center text-gray-600 mt-8">
+//           Remember your password?{" "}
+//           <Link
+//             to="/login"
+//             className="text-[#E23744] font-semibold hover:underline"
+//           >
+//             Login
+//           </Link>
+//         </p>
+//       </motion.div>
+//     </div>
+//   );
+// }
+
+// /* Reusable Password Field */
+// function PasswordField({ label, value, setValue, inputRef }) {
+//   const [visible, setVisible] = useState(false);
+
+//   return (
+//     <div className="relative">
+//       <Key className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-300 w-5 h-5" />
+
+//       <input
+//         type={visible ? "text" : "password"}
+//         placeholder={label}
+//         value={value}
+//         ref={inputRef || null}
+//         onChange={(e) => setValue(e.target.value)}
+//         className="w-full pl-11 pr-12 py-3 rounded-xl border border-gray-300 focus:border-[#E23744] focus:ring-2 focus:ring-[#E23744]/30 outline-none shadow-sm"
+//       />
+
+//       <span
+//         onClick={() => setVisible(!visible)}
+//         className="absolute right-3 top-1/2 -translate-y-1/2 cursor-pointer text-gray-400 hover:text-[#E23744]"
+//       >
+//         {visible ? <EyeOff /> : <Eye />}
+//       </span>
+//     </div>
+//   );
+// }
+
+
+
+
+
 
 import { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";

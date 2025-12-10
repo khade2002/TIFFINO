@@ -1,3 +1,263 @@
+// // src/admin/pages/AdminResetPassword.jsx
+// import React, { useState } from "react";
+// import { motion } from "framer-motion";
+// import {
+//   Lock,
+//   ArrowLeft,
+//   KeyRound,
+//   ShieldCheck,
+//   Eye,
+//   EyeOff,
+// } from "lucide-react";
+// import { useNavigate } from "react-router-dom";
+// import toast from "react-hot-toast";
+// import { adminResetPassword } from "../../api/api";
+
+// export default function AdminResetPassword() {
+//   const [form, setForm] = useState({
+//     oldPassword: "",
+//     newPassword: "",
+//     confirmPassword: "",
+//   });
+
+//   const [show, setShow] = useState({
+//     old: false,
+//     new: false,
+//     confirm: false,
+//   });
+
+//   const [busy, setBusy] = useState(false);
+//   const nav = useNavigate();
+
+//   const submit = async (e) => {
+//     e.preventDefault();
+
+//     if (!form.oldPassword || !form.newPassword || !form.confirmPassword)
+//       return toast.error("All fields required");
+
+//     if (form.newPassword !== form.confirmPassword)
+//       return toast.error("New & confirm must match");
+
+//     setBusy(true);
+//     try {
+//       await adminResetPassword(form);
+//       toast.success("Password updated successfully");
+//       nav("/admin/dashboard");
+//     } catch (err) {
+//       toast.error(err?.response?.data || "Reset failed");
+//     } finally {
+//       setBusy(false);
+//     }
+//   };
+
+//   return (
+//     <div className="relative min-h-screen w-full overflow-hidden flex items-center justify-center bg-gradient-to-br from-red-50/40 to-gray-50/60 px-4">
+
+//       {/* Floating animated blobs */}
+//       <motion.div
+//         className="absolute top-20 left-10 w-72 h-72 bg-[#E23744]/20 rounded-full blur-3xl"
+//         animate={{ y: [0, -32, 0], opacity: [0.3, 0.55, 0.3] }}
+//         transition={{ duration: 12, repeat: Infinity }}
+//       />
+//       <motion.div
+//         className="absolute bottom-20 right-10 w-72 h-72 bg-[#E23744]/25 rounded-full blur-3xl"
+//         animate={{ y: [0, 30, 0], opacity: [0.4, 0.7, 0.4] }}
+//         transition={{ duration: 14, repeat: Infinity }}
+//       />
+
+//       {/* Card */}
+//       <motion.div
+//         initial={{ opacity: 0, y: 50, scale: 0.92 }}
+//         animate={{ opacity: 1, y: 0, scale: 1 }}
+//         transition={{ duration: 0.35 }}
+//         className="w-full max-w-md bg-white/70 backdrop-blur-2xl border border-white/40 shadow-2xl rounded-3xl p-8 relative z-10"
+//       >
+//         {/* HEADER BADGE */}
+//         <div className="flex justify-center mb-6">
+//           <motion.div
+//             whileHover={{ scale: 1.05 }}
+//             className="rounded-full px-4 py-2 bg-[#E23744] text-white font-medium text-sm shadow-lg flex items-center gap-2"
+//           >
+//             <ShieldCheck className="w-4 h-4" />
+//             Admin Security
+//           </motion.div>
+//         </div>
+
+//         {/* TITLE */}
+//         <h2 className="text-2xl font-extrabold text-center text-gray-900">
+//           Change Password
+//         </h2>
+
+//         <p className="text-center text-gray-600 text-sm mt-1 mb-7">
+//           Update your password regularly to keep your account secure.
+//         </p>
+
+//         {/* FORM */}
+//         <form onSubmit={submit} className="space-y-5">
+
+//           {/* OLD PASSWORD */}
+//           <div>
+//             <label className="text-sm font-semibold text-gray-700">
+//               Old Password
+//             </label>
+
+//             <div className="relative">
+//               <KeyRound className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+
+//               <input
+//                 type={show.old ? "text" : "password"}
+//                 placeholder="Enter old password"
+//                 value={form.oldPassword}
+//                 onChange={(e) =>
+//                   setForm({ ...form, oldPassword: e.target.value })
+//                 }
+//                 className="
+//                   w-full pl-10 pr-12 py-3 
+//                   bg-white/60 backdrop-blur-xl 
+//                   border border-gray-300 rounded-xl 
+//                   focus:ring-2 focus:ring-[#E23744] 
+//                   outline-none transition
+//                 "
+//               />
+
+//               {/* Show/Hide */}
+//               <button
+//                 type="button"
+//                 onClick={() => setShow({ ...show, old: !show.old })}
+//                 className="absolute right-3 top-1/2 -translate-y-1/2"
+//               >
+//                 {show.old ? (
+//                   <EyeOff className="text-gray-600" />
+//                 ) : (
+//                   <Eye className="text-gray-600" />
+//                 )}
+//               </button>
+//             </div>
+//           </div>
+
+//           {/* NEW PASSWORD */}
+//           <div>
+//             <label className="text-sm font-semibold text-gray-700">
+//               New Password
+//             </label>
+
+//             <div className="relative">
+//               <Lock className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+
+//               <input
+//                 type={show.new ? "text" : "password"}
+//                 placeholder="Enter new password"
+//                 value={form.newPassword}
+//                 onChange={(e) =>
+//                   setForm({ ...form, newPassword: e.target.value })
+//                 }
+//                 className="
+//                   w-full pl-10 pr-12 py-3 
+//                   bg-white/60 backdrop-blur-xl 
+//                   border border-gray-300 rounded-xl 
+//                   focus:ring-2 focus:ring-[#E23744] 
+//                   outline-none transition
+//                 "
+//               />
+
+//               <button
+//                 type="button"
+//                 onClick={() => setShow({ ...show, new: !show.new })}
+//                 className="absolute right-3 top-1/2 -translate-y-1/2"
+//               >
+//                 {show.new ? (
+//                   <EyeOff className="text-gray-600" />
+//                 ) : (
+//                   <Eye className="text-gray-600" />
+//                 )}
+//               </button>
+//             </div>
+//           </div>
+
+//           {/* CONFIRM PASSWORD */}
+//           <div>
+//             <label className="text-sm font-semibold text-gray-700">
+//               Confirm Password
+//             </label>
+
+//             <div className="relative">
+//               <Lock className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+
+//               <input
+//                 type={show.confirm ? "text" : "password"}
+//                 placeholder="Confirm new password"
+//                 value={form.confirmPassword}
+//                 onChange={(e) =>
+//                   setForm({ ...form, confirmPassword: e.target.value })
+//                 }
+//                 className="
+//                   w-full pl-10 pr-12 py-3 
+//                   bg-white/60 backdrop-blur-xl 
+//                   border border-gray-300 rounded-xl 
+//                   focus:ring-2 focus:ring-[#E23744] 
+//                   outline-none transition
+//                 "
+//               />
+
+//               <button
+//                 type="button"
+//                 onClick={() =>
+//                   setShow({ ...show, confirm: !show.confirm })
+//                 }
+//                 className="absolute right-3 top-1/2 -translate-y-1/2"
+//               >
+//                 {show.confirm ? (
+//                   <EyeOff className="text-gray-600" />
+//                 ) : (
+//                   <Eye className="text-gray-600" />
+//                 )}
+//               </button>
+//             </div>
+//           </div>
+
+//           {/* BUTTONS */}
+//           <div className="flex gap-3">
+
+//             {/* SAVE */}
+//             <motion.button
+//               type="submit"
+//               whileHover={{ scale: 1.02 }}
+//               whileTap={{ scale: 0.96 }}
+//               disabled={busy}
+//               className="
+//                 flex-1 py-3 rounded-xl font-semibold text-white 
+//                 bg-[#E23744] shadow-lg hover:shadow-[#E23744]/40 
+//                 transition
+//               "
+//             >
+//               {busy ? "Saving..." : "Save Password"}
+//             </motion.button>
+
+//             {/* CANCEL */}
+//             <motion.button
+//               type="button"
+//               whileTap={{ scale: 0.96 }}
+//               onClick={() => nav("/admin/dashboard")}
+//               className="
+//                 px-4 py-3 rounded-xl border bg-white 
+//                 font-medium flex items-center gap-2 
+//                 text-gray-700 shadow-sm hover:bg-gray-50 transition
+//               "
+//             >
+//               <ArrowLeft className="w-4 h-4" />
+//               Cancel
+//             </motion.button>
+//           </div>
+//         </form>
+
+//       </motion.div>
+//     </div>
+//   );
+// }
+
+
+
+
 
 import React, { useState } from "react";
 import { motion } from "framer-motion";

@@ -1,3 +1,611 @@
+// import { useEffect, useState } from "react";
+// import { motion } from "framer-motion";
+// import { Link, useNavigate, useLocation } from "react-router-dom";
+// import toast from "react-hot-toast";
+// import { Lock, AtSign, Eye, EyeOff, Sparkles } from "lucide-react";
+
+// // Auth Context
+// import { useAuth } from "../../context/AuthContext";
+
+// export default function Login() {
+//   const navigate = useNavigate();
+//   const location = useLocation();
+//   const { login, loading } = useAuth();
+
+//   const [form, setForm] = useState({ email: "", password: "" });
+//   const [showPassword, setShowPassword] = useState(false);
+
+//   // ONLY redirect if token exists AND user landed intentionally on login page
+//   useEffect(() => {
+//     const token = localStorage.getItem("token");
+//     if (token) navigate("/profile", { replace: true });
+//   }, []);
+
+//   const handleChange = (e) => {
+//     setForm({ ...form, [e.target.name]: e.target.value });
+//   };
+
+//   // ================================
+//   // 🔥 FINAL LOGIN HANDLER (UPDATED)
+//   // ================================
+//   const handleSubmit = async (e) => {
+//     e.preventDefault();
+
+//     if (!form.email.trim() || !form.password.trim()) {
+//       toast.error("Please fill all fields ❌");
+//       return;
+//     }
+
+//     const isLoggedIn = await login({
+//       email: form.email.trim(),
+//       password: form.password,
+//     });
+
+//     if (!isLoggedIn) {
+//       toast.error("Invalid email or password ❌");
+//       return;
+//     }
+
+//     // Redirect after login
+//     const redirectTo = location.state?.from?.pathname || "/profile";
+//     navigate(redirectTo, { replace: true });
+//   };
+
+//   return (
+//     <div className="min-h-[85vh] flex items-center justify-center bg-gradient-to-b from-white via-red-50/30 to-gray-50 px-4 py-10">
+//       <motion.div
+//         initial={{ opacity: 0, y: 64, scale: 0.95 }}
+//         animate={{ opacity: 1, y: 0, scale: 1 }}
+//         transition={{ duration: 0.6, ease: "easeOut" }}
+//         className="bg-white w-full max-w-md rounded-3xl shadow-2xl border border-gray-100 px-6 py-10 sm:p-10"
+//       >
+//         {/* Header */}
+//         <motion.div
+//           initial={{ scale: 0 }}
+//           animate={{ scale: 1 }}
+//           transition={{ delay: 0.15, type: "spring" }}
+//           className="flex justify-center mb-7"
+//         >
+//           <div className="rounded-full bg-[#E23744]/15 px-4 py-2 inline-flex items-center gap-1 text-[#E23744] font-bold text-sm">
+//             <Sparkles className="w-4 h-4" />
+//             Premium Login
+//           </div>
+//         </motion.div>
+
+//         <motion.h2
+//           initial={{ opacity: 0, y: 12 }}
+//           animate={{ opacity: 1, y: 0 }}
+//           transition={{ delay: 0.05 }}
+//           className="text-3xl sm:text-2xl font-extrabold text-center bg-gradient-to-r from-[#E23744] to-pink-600 bg-clip-text text-transparent mb-8"
+//         >
+//           Welcome Back 👋
+//         </motion.h2>
+
+//         {/* Login Form */}
+//         <form onSubmit={handleSubmit} className="space-y-6" autoComplete="on">
+//           {/* Email */}
+//           <div>
+//             <label className="block text-sm font-bold text-gray-700 mb-1">
+//               Email
+//             </label>
+//             <div className="relative">
+//               <AtSign className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-300 w-5 h-5" />
+//               <input
+//                 type="email"
+//                 name="email"
+//                 value={form.email}
+//                 onChange={handleChange}
+//                 required
+//                 placeholder="Enter your email"
+//                 className="w-full pl-10 pr-3 py-3 rounded-xl border border-gray-200 focus:border-[#E23744] focus:ring-2 focus:ring-[#E23744]/30 outline-none shadow-sm"
+//               />
+//             </div>
+//           </div>
+
+//           {/* Password */}
+//           <div>
+//             <label className="block text-sm font-bold text-gray-700 mb-1">
+//               Password
+//             </label>
+//             <div className="relative">
+//               <Lock className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-300 w-5 h-5" />
+
+//               <input
+//                 type={showPassword ? "text" : "password"}
+//                 name="password"
+//                 value={form.password}
+//                 onChange={handleChange}
+//                 required
+//                 placeholder="Enter your password"
+//                 className="w-full pl-10 pr-12 py-3 rounded-xl border border-gray-200 focus:border-[#E23744] focus:ring-2 focus:ring-[#E23744]/30 outline-none shadow-sm"
+//               />
+
+//               <button
+//                 type="button"
+//                 onClick={() => setShowPassword((v) => !v)}
+//                 className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-[#E23744]"
+//               >
+//                 {showPassword ? <EyeOff /> : <Eye />}
+//               </button>
+//             </div>
+
+//             <div className="flex justify-end text-xs mt-2">
+//               <Link
+//                 to="/forgot-password"
+//                 className="text-[#E23744] font-bold hover:underline"
+//               >
+//                 Forgot Password?
+//               </Link>
+//             </div>
+//           </div>
+
+//           {/* Submit */}
+//           <button
+//             type="submit"
+//             disabled={loading}
+//             className={`w-full py-3 rounded-xl font-bold text-base shadow-lg transition-all flex items-center justify-center gap-2 ${
+//               loading
+//                 ? "bg-[#E23744]/70 cursor-not-allowed text-white"
+//                 : "bg-gradient-to-r from-[#E23744] to-pink-600 hover:from-pink-600 hover:to-[#E23744] text-white"
+//             }`}
+//           >
+//             {loading ? "Logging in..." : "Login"}
+//           </button>
+//         </form>
+
+//         <p className="text-sm text-center text-gray-600 mt-8">
+//           Don’t have an account?{" "}
+//           <Link
+//             to="/signup"
+//             className="text-[#E23744] font-semibold hover:underline"
+//           >
+//             Sign up
+//           </Link>
+//         </p>
+//       </motion.div>
+//     </div>
+//   );
+// }
+
+
+
+
+// // src/pages/Auth/Login.jsx
+// import { useEffect, useState, useRef } from "react";
+// import { motion } from "framer-motion";
+// import { Link, useNavigate, useLocation } from "react-router-dom";
+// import toast from "react-hot-toast";
+// import { Lock, AtSign, Eye, EyeOff, Sparkles } from "lucide-react";
+// import { useAuth } from "../../context/AuthContext";
+
+// export default function Login() {
+//   const navigate = useNavigate();
+//   const location = useLocation();
+//   const { login, loading } = useAuth();
+//   const emailRef = useRef(null);
+
+//   const [form, setForm] = useState({ email: "", password: "" });
+//   const [showPassword, setShowPassword] = useState(false);
+//   const [shake, setShake] = useState(false);
+
+//   // Auto focus email field
+//   useEffect(() => {
+//     emailRef.current?.focus();
+//   }, []);
+
+//   // Redirect if already logged in
+//   useEffect(() => {
+//     const token = localStorage.getItem("token");
+//     if (token) navigate("/profile", { replace: true });
+//   }, []);
+
+//   const handleChange = (e) =>
+//     setForm({ ...form, [e.target.name]: e.target.value });
+
+//   const validateForm = () => {
+//     if (!form.email.trim()) return "Email is required";
+//     if (!/\S+@\S+\.\S+/.test(form.email)) return "Enter valid email";
+//     if (!form.password.trim()) return "Password is required";
+//     return null;
+//   };
+
+//   const handleSubmit = async (e) => {
+//     e.preventDefault();
+//     const errorMsg = validateForm();
+//     if (errorMsg) {
+//       toast.error(errorMsg);
+//       triggerShake();
+//       return;
+//     }
+
+//     const success = await login({
+//       email: form.email.trim(),
+//       password: form.password,
+//     });
+
+//     if (!success) {
+//       toast.error("Invalid email or password ❌");
+//       triggerShake();
+//       return;
+//     }
+
+//     const redirectTo = location.state?.from?.pathname || "/profile";
+//     navigate(redirectTo, { replace: true });
+//   };
+
+//   const triggerShake = () => {
+//     setShake(true);
+//     setTimeout(() => setShake(false), 400);
+//   };
+
+//   return (
+//     <div className="min-h-[85vh] flex items-center justify-center bg-gradient-to-b from-white via-red-50/20 to-gray-100 px-4 py-10">
+//       <motion.div
+//         initial={{ opacity: 0, y: 60, scale: 0.95 }}
+//         animate={{ opacity: 1, y: 0, scale: 1 }}
+//         transition={{ duration: 0.55, ease: "easeOut" }}
+//         className="bg-white w-full max-w-md rounded-3xl shadow-2xl border border-gray-100 px-7 py-10 sm:p-10"
+//       >
+//         {/* Badge */}
+//         <motion.div
+//           initial={{ scale: 0 }}
+//           animate={{ scale: 1 }}
+//           transition={{ type: "spring", delay: 0.1 }}
+//           className="flex justify-center mb-6"
+//         >
+//           <div className="rounded-full bg-[#E23744]/15 px-4 py-2 flex items-center gap-2 text-[#E23744] font-bold text-sm">
+//             <Sparkles className="w-4 h-4" />
+//             Tiffino Login
+//           </div>
+//         </motion.div>
+
+//         {/* Title */}
+//         <motion.h2
+//           initial={{ opacity: 0, y: 8 }}
+//           animate={{ opacity: 1, y: 0 }}
+//           className="text-3xl sm:text-2xl font-extrabold text-center bg-gradient-to-r from-[#E23744] to-pink-600 bg-clip-text text-transparent mb-7"
+//         >
+//           Welcome Back 👋
+//         </motion.h2>
+
+//         {/* Form */}
+//         <motion.form
+//           onSubmit={handleSubmit}
+//           className="space-y-6"
+//           animate={shake ? { x: [-6, 6, -6, 6, 0] } : {}}
+//         >
+//           {/* Email Field */}
+//           <div>
+//             <label className="block text-sm font-bold text-gray-700 mb-1">
+//               Email
+//             </label>
+//             <div className="relative">
+//               <AtSign className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-300 w-5 h-5" />
+//               <input
+//                 ref={emailRef}
+//                 type="email"
+//                 name="email"
+//                 value={form.email}
+//                 onChange={handleChange}
+//                 placeholder="Enter your email"
+//                 className="w-full pl-11 pr-3 py-3 rounded-xl border border-gray-200 focus:border-[#E23744] focus:ring-2 focus:ring-[#E23744]/30 outline-none transition-all shadow-sm"
+//               />
+//             </div>
+//           </div>
+
+//           {/* Password Field */}
+//           <div>
+//             <label className="block text-sm font-bold text-gray-700 mb-1">
+//               Password
+//             </label>
+//             <div className="relative">
+//               <Lock className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-300 w-5 h-5" />
+
+//               <input
+//                 type={showPassword ? "text" : "password"}
+//                 name="password"
+//                 value={form.password}
+//                 onChange={handleChange}
+//                 placeholder="Enter your password"
+//                 className="w-full pl-11 pr-12 py-3 rounded-xl border border-gray-200 focus:border-[#E23744] focus:ring-2 focus:ring-[#E23744]/30 outline-none transition-all shadow-sm"
+//               />
+
+//               <button
+//                 type="button"
+//                 onClick={() => setShowPassword(!showPassword)}
+//                 className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-[#E23744]"
+//               >
+//                 {showPassword ? <EyeOff /> : <Eye />}
+//               </button>
+//             </div>
+
+//             <div className="flex justify-end text-xs mt-2">
+//               <Link
+//                 to="/forgot-password"
+//                 className="text-[#E23744] font-bold hover:underline"
+//               >
+//                 Forgot Password?
+//               </Link>
+//             </div>
+//           </div>
+
+//           {/* Submit Button */}
+//           <motion.button
+//             type="submit"
+//             disabled={loading}
+//             whileTap={{ scale: 0.95 }}
+//             className={`w-full py-3 rounded-xl font-bold text-base shadow-lg transition-all flex items-center justify-center gap-2 ${
+//               loading
+//                 ? "bg-[#E23744]/70 cursor-not-allowed text-white"
+//                 : "bg-gradient-to-r from-[#E23744] to-pink-600 hover:from-pink-600 hover:to-[#E23744] text-white"
+//             }`}
+//           >
+//             {loading ? "Logging in..." : "Login"}
+//           </motion.button>
+//         </motion.form>
+
+//         {/* Footer */}
+//         <p className="text-sm text-center text-gray-600 mt-8">
+//           Don’t have an account?{" "}
+//           <Link
+//             to="/signup"
+//             className="text-[#E23744] font-semibold hover:underline"
+//           >
+//             Sign up
+//           </Link>
+//         </p>
+//       </motion.div>
+//     </div>
+//   );
+// }
+
+
+// // src/pages/Auth/Login.jsx
+// import { useEffect, useState, useRef } from "react";
+// import { motion, AnimatePresence } from "framer-motion";
+// import { Link, useNavigate, useLocation } from "react-router-dom";
+// import toast from "react-hot-toast";
+// import {
+//   Lock,
+//   AtSign,
+//   Eye,
+//   EyeOff,
+//   Sparkles,
+//   ChevronDown,
+//   Shield,
+//   UserCog,
+// } from "lucide-react";
+// import { useAuth } from "../../context/AuthContext";
+
+// export default function Login() {
+//   const navigate = useNavigate();
+//   const location = useLocation();
+//   const { login, loading } = useAuth();
+//   const emailRef = useRef(null);
+
+//   const [form, setForm] = useState({ email: "", password: "" });
+//   const [showPassword, setShowPassword] = useState(false);
+//   const [shake, setShake] = useState(false);
+//   const [openDropdown, setOpenDropdown] = useState(false);
+
+//   useEffect(() => {
+//     emailRef.current?.focus();
+//   }, []);
+
+//   // If user already logged in → redirect to profile
+//   useEffect(() => {
+//     const token = localStorage.getItem("token");
+//     if (token) navigate("/profile", { replace: true });
+//   }, [navigate]);
+
+//   const handleChange = (e) =>
+//     setForm({ ...form, [e.target.name]: e.target.value });
+
+//   const validateForm = () => {
+//     if (!form.email.trim()) return "Email is required";
+//     if (!/\S+@\S+\.\S+/.test(form.email)) return "Enter valid email";
+//     if (!form.password.trim()) return "Password is required";
+//     return null;
+//   };
+
+//   const handleSubmit = async (e) => {
+//     e.preventDefault();
+
+//     const errorMsg = validateForm();
+//     if (errorMsg) {
+//       toast.error(errorMsg);
+//       triggerShake();
+//       return;
+//     }
+
+//     const success = await login({
+//       email: form.email.trim(),
+//       password: form.password,
+//     });
+
+//     if (!success) {
+//       toast.error("Invalid email or password ❌");
+//       triggerShake();
+//       return;
+//     }
+
+//     const redirectTo = location.state?.from?.pathname || "/profile";
+//     navigate(redirectTo, { replace: true });
+//   };
+
+//   const triggerShake = () => {
+//     setShake(true);
+//     setTimeout(() => setShake(false), 400);
+//   };
+
+//   return (
+//     <div className="min-h-[85vh] flex items-center justify-center bg-gradient-to-b from-white via-red-50/20 to-gray-100 px-4 py-10">
+//       <motion.div
+//         initial={{ opacity: 0, y: 60, scale: 0.95 }}
+//         animate={{ opacity: 1, y: 0, scale: 1 }}
+//         transition={{ duration: 0.55, ease: "easeOut" }}
+//         className="bg-white w-full max-w-md rounded-3xl shadow-2xl border border-gray-100 px-7 py-10 sm:p-10 relative"
+//       >
+//         {/* ---------- LOGIN TYPE DROPDOWN ---------- */}
+//         <div className="absolute top-4 right-4">
+//           <div
+//             onClick={() => setOpenDropdown(!openDropdown)}
+//             className="cursor-pointer flex items-center gap-1 bg-[#E23744]/10 hover:bg-[#E23744]/20 transition px-3 py-1.5 rounded-xl shadow-sm font-semibold text-[#E23744] text-sm"
+//           >
+//             Login Options
+//             <ChevronDown
+//               className={`w-4 h-4 transition ${
+//                 openDropdown ? "rotate-180" : ""
+//               }`}
+//             />
+//           </div>
+
+//           <AnimatePresence>
+//             {openDropdown && (
+//               <motion.div
+//                 initial={{ opacity: 0, y: -10, scale: 0.95 }}
+//                 animate={{ opacity: 1, y: 0, scale: 1 }}
+//                 exit={{ opacity: 0, y: -10, scale: 0.95 }}
+//                 transition={{ duration: 0.2 }}
+//                 className="absolute right-0 mt-2 w-44 bg-white shadow-xl border border-gray-200 rounded-xl overflow-hidden z-30"
+//               >
+//                 {/* SUPER ADMIN */}
+//                 <div
+//                   onClick={() => window.open("/superadmin/login", "_blank")}
+//                   className="flex items-center gap-2 px-4 py-3 hover:bg-red-50 cursor-pointer text-sm font-semibold text-gray-700"
+//                 >
+//                   <Shield className="w-4 h-4 text-[#E23744]" />
+//                   Super Admin
+//                 </div>
+
+//                 {/* ADMIN */}
+//                 <div
+//                   onClick={() => window.open("/admin/login", "_blank")}
+//                   className="flex items-center gap-2 px-4 py-3 hover:bg-red-50 cursor-pointer text-sm font-semibold text-gray-700"
+//                 >
+//                   <UserCog className="w-4 h-4 text-[#E23744]" />
+//                   Admin
+//                 </div>
+//               </motion.div>
+//             )}
+//           </AnimatePresence>
+//         </div>
+
+//         {/* Badge */}
+//         <motion.div
+//           initial={{ scale: 0 }}
+//           animate={{ scale: 1 }}
+//           transition={{ type: "spring", delay: 0.1 }}
+//           className="flex justify-center mb-6"
+//         >
+//           <div className="rounded-full bg-[#E23744]/15 px-4 py-2 flex items-center gap-2 text-[#E23744] font-bold text-sm">
+//             <Sparkles className="w-4 h-4" />
+//             Tiffino Login
+//           </div>
+//         </motion.div>
+
+//         {/* Title */}
+//         <motion.h2
+//           initial={{ opacity: 0, y: 8 }}
+//           animate={{ opacity: 1, y: 0 }}
+//           className="text-3xl sm:text-2xl font-extrabold text-center bg-gradient-to-r from-[#E23744] to-pink-600 bg-clip-text text-transparent mb-7"
+//         >
+//           Welcome Back 👋
+//         </motion.h2>
+
+//         {/* Form */}
+//         <motion.form
+//           onSubmit={handleSubmit}
+//           className="space-y-6"
+//           animate={shake ? { x: [-6, 6, -6, 6, 0] } : {}}
+//         >
+//           {/* Email Field */}
+//           <div>
+//             <label className="block text-sm font-bold text-gray-700 mb-1">
+//               Email
+//             </label>
+//             <div className="relative">
+//               <AtSign className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-300 w-5 h-5" />
+//               <input
+//                 ref={emailRef}
+//                 type="email"
+//                 name="email"
+//                 value={form.email}
+//                 onChange={handleChange}
+//                 placeholder="Enter your email"
+//                 className="w-full pl-11 pr-3 py-3 rounded-xl border border-gray-200 focus:border-[#E23744] focus:ring-2 focus:ring-[#E23744]/30 outline-none transition-all shadow-sm"
+//               />
+//             </div>
+//           </div>
+
+//           {/* Password Field */}
+//           <div>
+//             <label className="block text-sm font-bold text-gray-700 mb-1">
+//               Password
+//             </label>
+//             <div className="relative">
+//               <Lock className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-300 w-5 h-5" />
+
+//               <input
+//                 type={showPassword ? "text" : "password"}
+//                 name="password"
+//                 value={form.password}
+//                 onChange={handleChange}
+//                 placeholder="Enter your password"
+//                 className="w-full pl-11 pr-12 py-3 rounded-xl border border-gray-200 focus:border-[#E23744] focus:ring-2 focus:ring-[#E23744]/30 outline-none transition-all shadow-sm"
+//               />
+
+//               <button
+//                 type="button"
+//                 onClick={() => setShowPassword(!showPassword)}
+//                 className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-[#E23744]"
+//               >
+//                 {showPassword ? <EyeOff /> : <Eye />}
+//               </button>
+//             </div>
+
+//             <div className="flex justify-end text-xs mt-2">
+//               <Link
+//                 to="/forgot-password"
+//                 className="text-[#E23744] font-bold hover:underline"
+//               >
+//                 Forgot Password?
+//               </Link>
+//             </div>
+//           </div>
+
+//           {/* Submit Button */}
+//           <motion.button
+//             type="submit"
+//             disabled={loading}
+//             whileTap={{ scale: 0.95 }}
+//             className={`w-full py-3 rounded-xl font-bold text-base shadow-lg transition-all flex items-center justify-center gap-2 ${
+//               loading
+//                 ? "bg-[#E23744]/70 cursor-not-allowed text-white"
+//                 : "bg-gradient-to-r from-[#E23744] to-pink-600 hover:from-pink-600 hover:to-[#E23744] text-white"
+//             }`}
+//           >
+//             {loading ? "Logging in..." : "Login"}
+//           </motion.button>
+//         </motion.form>
+
+//         {/* Footer */}
+//         <p className="text-sm text-center text-gray-600 mt-8">
+//           Don’t have an account?{" "}
+//           <Link
+//             to="/signup"
+//             className="text-[#E23744] font-semibold hover:underline"
+//           >
+//             Sign up
+//           </Link>
+//         </p>
+//       </motion.div>
+//     </div>
+//   );
+// }
+
+
+
 
 import { useEffect, useState, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";

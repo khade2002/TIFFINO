@@ -1,3 +1,207 @@
+// // src/admin/pages/AdminLogin.jsx
+// import React, { useEffect, useRef, useState } from "react";
+// import { motion } from "framer-motion";
+// import { AtSign, Lock, Eye, EyeOff, Shield } from "lucide-react";
+// import { useNavigate } from "react-router-dom";
+// import { useAdminAuth } from "../context/AdminAuthContext";
+// import toast from "react-hot-toast";
+
+// export default function AdminLogin() {
+//   const { login } = useAdminAuth();
+//   const nav = useNavigate();
+//   const emailRef = useRef(null);
+
+//   const [form, setForm] = useState({ email: "", password: "" });
+//   const [showPwd, setShowPwd] = useState(false);
+//   const [busy, setBusy] = useState(false);
+//   const [shake, setShake] = useState(false);
+
+//   useEffect(() => emailRef.current?.focus(), []);
+
+//   const triggerShake = () => {
+//     setShake(true);
+//     setTimeout(() => setShake(false), 400);
+//   };
+
+//   const submit = async (e) => {
+//     e.preventDefault();
+
+//     if (!form.email.trim() || !form.password.trim()) {
+//       toast.error("Email & password required");
+//       triggerShake();
+//       return;
+//     }
+
+//     setBusy(true);
+
+//     const res = await login(form.email.trim(), form.password);
+//     setBusy(false);
+
+//     if (!res.ok) {
+//       triggerShake();
+//       toast.error("Invalid credentials");
+//       return;
+//     }
+
+//     if (!res.firstResetDone) {
+//       nav("/admin/first-reset", { replace: true });
+//     } else {
+//       nav("/admin/dashboard", { replace: true });
+//     }
+//   };
+
+//   return (
+//     <div className="relative min-h-screen w-full overflow-hidden flex items-center justify-center bg-gradient-to-br from-red-50/40 to-gray-50/60 px-4">
+
+//       {/* Floating Red Blobs */}
+//       <motion.div
+//         className="absolute top-20 left-10 w-72 h-72 bg-[#E23744]/20 rounded-full blur-3xl"
+//         animate={{ y: [0, -30, 0], opacity: [0.3, 0.5, 0.3] }}
+//         transition={{ duration: 10, repeat: Infinity }}
+//       />
+//       <motion.div
+//         className="absolute bottom-16 right-10 w-72 h-72 bg-[#E23744]/25 rounded-full blur-3xl"
+//         animate={{ y: [0, 40, 0], opacity: [0.4, 0.7, 0.4] }}
+//         transition={{ duration: 12, repeat: Infinity }}
+//       />
+
+//       {/* LOGIN CARD */}
+//       <motion.div
+//         initial={{ opacity: 0, y: 50, scale: 0.9 }}
+//         animate={{ opacity: 1, y: 0, scale: 1 }}
+//         transition={{ duration: 0.4 }}
+//         className="
+//           w-full max-w-md 
+//           bg-white/70 backdrop-blur-2xl 
+//           border border-white/40 shadow-2xl 
+//           rounded-3xl p-8 relative z-10
+//         "
+//       >
+//         {/* Admin Badge */}
+//         <div className="flex justify-center mb-5">
+//           <motion.div
+//             whileHover={{ scale: 1.06 }}
+//             className="
+//               px-4 py-2 rounded-full 
+//               bg-[#E23744] text-white 
+//               shadow-lg text-sm font-semibold 
+//               flex items-center gap-2
+//             "
+//           >
+//             <Shield size={16} /> Admin Access
+//           </motion.div>
+//         </div>
+
+//         {/* Title */}
+//         <h2 className="text-3xl font-extrabold text-center text-gray-900 mb-6">
+//           Admin Login
+//         </h2>
+
+//         {/* FORM */}
+//         <motion.form
+//           onSubmit={submit}
+//           animate={shake ? { x: [-8, 8, -8, 8, 0] } : {}}
+//           transition={{ duration: 0.35 }}
+//           className="space-y-6"
+//         >
+//           {/* EMAIL */}
+//           <div>
+//             <label className="text-sm font-semibold text-gray-600">Email</label>
+
+//             <div className="relative">
+//               <AtSign className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+
+//               <input
+//                 ref={emailRef}
+//                 type="email"
+//                 placeholder="admin@example.com"
+//                 value={form.email}
+//                 onChange={(e) => setForm({ ...form, email: e.target.value })}
+//                 className="
+//                   w-full pl-10 pr-3 py-3 
+//                   bg-white/60 backdrop-blur-xl 
+//                   border border-gray-300 
+//                   rounded-xl 
+//                   focus:ring-2 focus:ring-[#E23744]
+//                   transition
+//                 "
+//               />
+//             </div>
+//           </div>
+
+//           {/* PASSWORD */}
+//           <div>
+//             <label className="text-sm font-semibold text-gray-600">Password</label>
+
+//             <div className="relative">
+//               <Lock className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+
+//               <input
+//                 type={showPwd ? "text" : "password"}
+//                 placeholder="Enter password"
+//                 value={form.password}
+//                 onChange={(e) => setForm({ ...form, password: e.target.value })}
+//                 className="
+//                   w-full pl-10 pr-12 py-3 
+//                   bg-white/60 backdrop-blur-xl 
+//                   border border-gray-300 
+//                   rounded-xl 
+//                   focus:ring-2 focus:ring-[#E23744]
+//                   transition
+//                 "
+//               />
+
+//               <button
+//                 type="button"
+//                 onClick={() => setShowPwd(!showPwd)}
+//                 className="absolute right-3 top-1/2 -translate-y-1/2"
+//               >
+//                 {showPwd ? (
+//                   <EyeOff className="text-gray-600" />
+//                 ) : (
+//                   <Eye className="text-gray-600" />
+//                 )}
+//               </button>
+//             </div>
+//           </div>
+
+//           {/* FORGOT PASSWORD */}
+//           <div className="flex justify-end">
+//             <button
+//               type="button"
+//               onClick={() => nav("/admin/forgot-password")}
+//               className="text-sm text-[#E23744] hover:underline"
+//             >
+//               Forgot password?
+//             </button>
+//           </div>
+
+//           {/* LOGIN BUTTON */}
+//           <motion.button
+//             whileHover={{ scale: 1.02 }}
+//             whileTap={{ scale: 0.96 }}
+//             disabled={busy}
+//             className="
+//               w-full py-3 rounded-xl 
+//               font-bold text-white text-lg
+//               bg-[#E23744] 
+//               shadow-xl hover:shadow-[#E23744]/40 
+//               transition
+//             "
+//           >
+//             {busy ? "Signing in..." : "Login"}
+//           </motion.button>
+//         </motion.form>
+//       </motion.div>
+//     </div>
+//   );
+// }
+
+
+
+
+
+
 
 
 import React, { useEffect, useRef, useState } from "react";

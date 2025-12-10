@@ -1,3 +1,101 @@
+// import React, { useEffect, useState } from "react";
+// import { getAllAdminReviews } from "../../api/api";
+// import { motion } from "framer-motion";
+// import { Star } from "lucide-react";
+// import toast from "react-hot-toast";
+
+// export default function AdminReviews() {
+//   const [reviews, setReviews] = useState([]);
+
+//   // ⭐ Load reviews from backend
+//   const loadReviews = async () => {
+//     try {
+//       const res = await getAllAdminReviews();
+//       setReviews(res.data || []);
+//     } catch (err) {
+//       toast.error("Failed to load reviews");
+//       console.log(err);
+//     }
+//   };
+
+//   useEffect(() => {
+//     loadReviews();
+//   }, []);
+
+//   // ⭐ Rating stars component
+//   const Stars = ({ count }) => (
+//     <div className="flex gap-1">
+//       {[...Array(5)].map((_, i) => (
+//         <Star
+//           key={i}
+//           className={`w-4 h-4 ${
+//             i < count
+//               ? "text-yellow-400 fill-yellow-400"
+//               : "text-gray-300"
+//           }`}
+//         />
+//       ))}
+//     </div>
+//   );
+
+//   return (
+//     <div className="p-6 min-h-screen bg-gray-50">
+//       {/* Header */}
+//       <h1 className="text-2xl font-bold mb-6">User Reviews</h1>
+
+//       {/* Reviews List */}
+//       <div className="grid grid-cols-1 gap-4">
+//         {reviews.map((rev, idx) => (
+//           <motion.div
+//             key={rev.id}
+//             initial={{ opacity: 0, y: 10 }}
+//             animate={{ opacity: 1, y: 0 }}
+//             transition={{ delay: idx * 0.04 }}
+//             className="p-5 rounded-2xl bg-white border shadow-sm hover:shadow-md transition"
+//           >
+//             {/* Top Row */}
+//             <div className="flex justify-between items-start">
+//               <div>
+//                 {/* User Email */}
+//                 <div className="text-sm text-gray-600 font-medium">
+//                   {rev.userId}
+//                 </div>
+
+//                 {/* Order ID */}
+//                 <div className="text-xs text-gray-400 mt-1">
+//                   Order ID: {rev.orderId}
+//                 </div>
+
+//                 {/* Comment */}
+//                 <div className="font-semibold mt-3 text-gray-900">
+//                   {rev.comment}
+//                 </div>
+
+//                 {/* Rating + Date */}
+//                 <div className="flex items-center gap-3 mt-3">
+//                   <Stars count={rev.rating} />
+//                   <span className="text-xs text-gray-400">
+//                     {rev.reviewDate?.slice(0, 10)}
+//                   </span>
+//                 </div>
+//               </div>
+//             </div>
+//           </motion.div>
+//         ))}
+
+//         {/* No reviews fallback */}
+//         {reviews.length === 0 && (
+//           <div className="text-center text-gray-500 text-sm mt-10">
+//             No reviews available.
+//           </div>
+//         )}
+//       </div>
+//     </div>
+//   );
+// }
+
+
+
 
 import React, { useEffect, useMemo, useState } from "react";
 import { getAllAdminReviews } from "../../api/api";
