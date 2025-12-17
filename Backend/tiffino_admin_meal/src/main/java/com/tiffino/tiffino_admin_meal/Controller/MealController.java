@@ -6,9 +6,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+
 @CrossOrigin("*")
 @RestController
-@RequestMapping("/adminn/meals")
+@RequestMapping("api/adminmeal/meals")
 public class MealController {
 
     private final MealService mealService;

@@ -10,9 +10,10 @@ import org.springframework.web.bind.annotation.*;
 
 import java.security.SecureRandom;
 import java.util.List;
+
 @CrossOrigin("*")
 @RestController
-@RequestMapping("/api/admin/managers")
+@RequestMapping("/api/Super/admin/managers")
 public class ManagerController {
 
     private final ManagerRepository repo;

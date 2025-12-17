@@ -6,10 +6,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+
 @CrossOrigin("*")
 @RestController
 //@CrossOrigin(origins = "http://localhost:5173")
-@RequestMapping("/log/addresses")
+@RequestMapping("api/userlog/addresses")
 public class AddressController {
 
     @Autowired

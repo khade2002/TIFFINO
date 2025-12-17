@@ -4,9 +4,10 @@ import com.tiffino.Tiffino_user_subscription.service.OrderService;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+
 @CrossOrigin("*")
 @RestController
-@RequestMapping("/subscri/orders")
+@RequestMapping("/api/usersubscribtion/subscri/orders")
 public class OrderController {
 
     private final OrderService orderService;

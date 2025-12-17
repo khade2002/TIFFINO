@@ -8,7 +8,8 @@
 //import org.springframework.web.bind.annotation.*;
 //import java.util.List;
 //
-//@RestController
+//@CrossOrigin("*")
+@RestController
 ////@CrossOrigin(origins = "http://localhost:5173")
 //@RequestMapping("/reviews")
 //public class ReviewController {
@@ -69,9 +70,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
+
 @CrossOrigin("*")
 @RestController
-@RequestMapping("/reviews")
+@RequestMapping("api/userreview/reviews")
 public class ReviewController {
 
     @Autowired

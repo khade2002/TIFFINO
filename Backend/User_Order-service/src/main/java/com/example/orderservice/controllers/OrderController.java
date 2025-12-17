@@ -11,9 +11,10 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Map;
+
 @CrossOrigin("*")
 @RestController
-@RequestMapping("/orders")
+@RequestMapping("api/userorder/orders")
 @RequiredArgsConstructor
 public class OrderController {
 

@@ -15,7 +15,6 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 //import org.springframework.web.cors.CorsConfiguration;
 //import org.springframework.web.cors.CorsConfigurationSource;
 //import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
-import org.springframework.web.bind.annotation.CrossOrigin;
 
 import java.util.List;
 
@@ -33,7 +32,7 @@ public class SecurityConfig {
 //                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .authorizeHttpRequests(auth -> auth
                         // Existing APIs
-                        .requestMatchers("/log/user/**", "/log/auth/**", "/log/otp/**").permitAll()
+                        .requestMatchers("api/userlog/user/**", "api/userlog/auth/**", "api/userlog/otp/**").permitAll()
                         // Swagger endpoints
                         .requestMatchers(
                                 "/v3/api-docs/**",

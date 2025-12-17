@@ -5,9 +5,10 @@ import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
+
 @CrossOrigin("*")
 @RestController
-@RequestMapping("/api/admin")
+@RequestMapping("/api/Super/admin")
 public class ExportController {
 
     private final ExcelExportService excelExportService;

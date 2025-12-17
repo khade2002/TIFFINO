@@ -5,9 +5,10 @@ import com.example.tiffino_admin_review.Service.UserServiceImpl;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+
 @CrossOrigin("*")
 @RestController
-@RequestMapping("/users")
+@RequestMapping("api/adminreview/users")
 public class UserController{
     private final UserServiceImpl userService;
 

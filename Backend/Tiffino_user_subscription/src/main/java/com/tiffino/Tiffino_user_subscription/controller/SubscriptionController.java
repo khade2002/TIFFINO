@@ -9,9 +9,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+
 @CrossOrigin("*")
 @RestController
-@RequestMapping("/subscri/subscriptions")
+@RequestMapping("/api/usersubscribtion/subscri/subscriptions")
 public class SubscriptionController {
 
     private final SubscriptionService subscriptionService;

@@ -50,7 +50,7 @@ API.interceptors.request.use((config) => {
   let token = null;
 
   // Prefer token based on route
-  if (url.startsWith("/api/admin")) {
+  if (url.startsWith("/api/admin")) {      //for update......
     // SUPER ADMIN APIs
     token = localStorage.getItem(tokenKeys.super);
   } else if (url.startsWith("/admin")) {
@@ -105,13 +105,13 @@ API.interceptors.response.use(
    ######################## USER AUTH ########################
    ########################################################## */
 
-export const sendOtp = (email) => API.post("/log/auth/send-otp", { email });
-export const verifyOtp = (data) => API.post("/log/auth/verify-otp", data);
-export const registerUser = (data) => API.post("/log/auth/register", data);
+export const sendOtp = (email) => API.post("/userlog/auth/send-otp", { email });
+export const verifyOtp = (data) => API.post("/userlog/auth/verify-otp", data);
+export const registerUser = (data) => API.post("/userlog/auth/register", data);
 
 // USER LOGIN (returns raw token string)
 export const loginUser = async (data) => {
-  const res = await API.post("/log/auth/login", data, {
+  const res = await API.post("/userlog/auth/login", data, {
     transformResponse: [(d) => d], // keep raw string
   });
 
@@ -126,105 +126,105 @@ export const logoutUser = () => {
   // Clear user related tokens (both keys)
   localStorage.removeItem(tokenKeys.user);
   localStorage.removeItem("token");
-  return API.post("/log/auth/logout");
+  return API.post("/userlog/auth/logout");
 };
 
 export const forgotPassword = (email) =>
-  API.post("/log/user/forgotPassword", { email });
+  API.post("/userlog/user/forgotPassword", { email });
 
 export const resetPassword = (data) =>
-  API.post("/log/user/resetPassword", data);
+  API.post("/userlog/user/resetPassword", data);
 
 /* ######################## USER CRUD ######################## */
 
 export const getUserByEmail = (email) =>
-  API.get(`/log/user/email?email=${encodeURIComponent(email)}`);
+  API.get(`/userlog/user/email?email=${encodeURIComponent(email)}`);
 
-export const getUserById = (id) => API.get(`/log/user/${id}`);
-export const updateUser = (id, data) => API.put(`/log/user/${id}`, data);
-export const deleteUser = (id) => API.delete(`/log/user/${id}`);
+export const getUserById = (id) => API.get(`/userlog/user/${id}`);
+export const updateUser = (id, data) => API.put(`/userlog/user/${id}`, data);
+export const deleteUser = (id) => API.delete(`/userlog/user/${id}`);
 
 /* ######################## ADDRESS ########################## */
 
-export const addAddress = (data) => API.post("/log/addresses/add", data);
-export const getAllAddresses = () => API.get("/log/addresses/all");
+export const addAddress = (data) => API.post("/userlog/addresses/add", data);
+export const getAllAddresses = () => API.get("/userlog/addresses/all");
 export const updateAddress = (id, data) =>
-  API.put(`/log/addresses/${id}`, data);
-export const deleteAddress = (id) => API.delete(`/log/addresses/${id}`);
+  API.put(`/userlog/addresses/${id}`, data);
+export const deleteAddress = (id) => API.delete(`/userlog/addresses/${id}`);
 
 /* ######################## CART ############################# */
 
-export const addItemToCart = (item) => API.post("/cart/items", item);
-export const getCartItems = () => API.get("/cart/items");
+export const addItemToCart = (item) => API.post("/usercart/items", item);
+export const getCartItems = () => API.get("/usercart/items");
 
 export const updateCartItem = (foodId, quantity) =>
-  API.put("/cart/items", { foodId, quantity });
+  API.put("/usercart/items", { foodId, quantity });
 
 export const removeCartItem = (foodId) =>
-  API.delete("/cart/items", { data: { foodId } });
+  API.delete("/usercart/items", { data: { foodId } });
 
-export const getCartTotal = () => API.get("/cart/total");
+export const getCartTotal = () => API.get("/usercart/total");
 
 // NEW — FULL CART CLEAR AFTER SUCCESS
-export const clearUserCart = () => API.delete("/cart/clear");
+export const clearUserCart = () => API.delete("/usercart/clear");
 
 /* ######################## USER SUBSCRIPTIONS #################### */
 
-export const getAllPlans = () => API.get("/subscri/plans");
+export const getAllPlans = () => API.get("/usersubscription/plans");
 export const getPlansByDuration = (d) =>
-  API.get(`/subscri/plans/duration/${d}`);
-export const getGroupedPlans = () => API.get("/subscri/plans/grouped");
+  API.get(`/usersubscription/plans/duration/${d}`);
+export const getGroupedPlans = () => API.get("/usersubscription/plans/grouped");
 
 export const createSubscription = (data) =>
-  API.post("/subscri/subscriptions", data);
+  API.post("/usersubscription/subscriptions", data);
 
 export const getSubscriptionById = (id) =>
-  API.get(`/subscri/subscriptions/${id}`);
+  API.get(`/usersubscription/subscriptions/${id}`);
 
-export const getAllSubscriptions = () => API.get("/subscri/subscriptions");
+export const getAllSubscriptions = () => API.get("/usersubscription/subscriptions");
 
 export const deleteSubscriptionById = (id) =>
-  API.delete(`/subscri/subscriptions/${id}`);
+  API.delete(`/usersubscription/subscriptions/${id}`);
 
 export const switchSubscription = (id, data) =>
-  API.put(`/subscri/subscriptions/${id}/switch`, data);
+  API.put(`/usersubscription/subscriptions/${id}/switch`, data);
 
 export const renewSubscription = (id, data) =>
-  API.put(`/subscri/subscriptions/${id}/renew`, data);
+  API.put(`/usersubscription/subscriptions/${id}/renew`, data);
 
 export const getSubscriptionReview = (id) =>
-  API.get(`/subscri/subscriptions/user/${id}/review`);
+  API.get(`/usersubscription/subscriptions/user/${id}/review`);
 
 /* ##########################################################
    ######################## USER ORDERS ###################### 
    ########################################################## */
 
 export const checkoutOrder = (data) =>
-  API.post("/usr/orders/checkout", data);
+  API.post("/userorder/orders/checkout", data);
 
-export const placeOrder = (data) => API.post("/usr/orders", data);
+export const placeOrder = (data) => API.post("/userorder/orders", data);
 
-export const userCreateOrder = (data) => API.post("/ordr/orders", data);
-export const userGetAllOrders = () => API.get("/ordr/orders");
-export const userGetOrderById = (id) => API.get(`/ordr/orders/${id}`);
+export const userCreateOrder = (data) => API.post("/userorder/orders", data);
+export const userGetAllOrders = () => API.get("/userorder/orders");
+export const userGetOrderById = (id) => API.get(`/userorder/orders/${id}`);
 
 export const userGetOrdersByStatus = (status) =>
-  API.get(`/ordr/orders`, { params: { status } });
+  API.get(`/userorder/orders`, { params: { status } });
 
 export const userUpdateOrderStatus = (id, data) =>
-  API.put(`/ordr/orders/${id}/status`, data);
+  API.put(`/userorder/orders/${id}/status`, data);
 
 // Legacy
 export const getOrdersByUserId = (userId) =>
-  API.get(`/usr/orders/user/${userId}`);
-export const getOrderById = (id) => API.get(`/usr/orders/${id}`);
+  API.get(`/userorder/orders/user/${userId}`);
+export const getOrderById = (id) => API.get(`/userorder/orders/${id}`);
 
 /* ##########################################################
    ######################## ADMIN AUTH ####################### 
    ########################################################## */
 
 export const adminLogin = async (data) => {
-  const res = await API.post("/admin/login", data, {
+  const res = await API.post("/adminlog/login", data, {
     transformResponse: [(raw) => raw],
   });
 
@@ -240,15 +240,15 @@ export const adminLogin = async (data) => {
 };
 
 export const adminForgotPassword = (email) =>
-  API.post("/admin/forgot-password", { email });
+  API.post("/adminlog/forgot-password", { email });
 
 export const adminResetPassword = (data) =>
-  API.post("/admin/reset-password", data);
+  API.post("/adminlog/reset-password", data);
 
 export const adminLogout = async () => {
   const token = localStorage.getItem(tokenKeys.admin);
   const res = await API.post(
-    "/admin/logout",
+    "/adminlog/logout",
     {},
     { headers: { Authorization: `Bearer ${token}` } }
   );
@@ -262,7 +262,7 @@ export const adminLogout = async () => {
    ########################################################## */
 
 export const superLogin = async (data) => {
-  const res = await API.post("/api/admin/login", data, {
+  const res = await API.post("/super/admin/login", data, {
     transformResponse: [(raw) => raw],
   });
 
@@ -279,48 +279,48 @@ export const superLogin = async (data) => {
 
 export const superLogout = () => {
   localStorage.removeItem(tokenKeys.super);
-  return API.post("/api/admin/logout");
+  return API.post("/super/admin/logout");
 };
 
-export const getReports = () => API.get("/api/admin/reports");
+export const getReports = () => API.get("/super/admin/reports");
 
-export const getKitchens = () => API.get("/api/admin/kitchens");
-export const createKitchen = (data) => API.post("/api/admin/kitchens", data);
+export const getKitchens = () => API.get("/super/admin/kitchens");
+export const createKitchen = (data) => API.post("/super/admin/kitchens", data);
 export const deleteKitchen = (id) =>
-  API.delete(`/api/admin/kitchens/${id}`);
+  API.delete(`/super/admin/kitchens/${id}`);
 
-export const getManagers = () => API.get("/api/admin/managers");
-export const createManager = (data) => API.post("/api/admin/managers", data);
+export const getManagers = () => API.get("/super/admin/managers");
+export const createManager = (data) => API.post("/super/admin/managers", data);
 export const deleteManager = (id) =>
-  API.delete(`/api/admin/managers/${id}`);
+  API.delete(`/super/admin/managers/${id}`);
 
 export const exportAll = () =>
-  API.get("/api/admin/export/all", { responseType: "blob" });
+  API.get("/super/admin/export/all", { responseType: "blob" });
 
 export const exportKitchenById = (id) =>
-  API.get(`/api/admin/export/kitchen/${id}`, { responseType: "blob" });
+  API.get(`/super/admin/export/kitchen/${id}`, { responseType: "blob" });
 
 /* ##########################################################
    ################### ADMIN CUISINES ########################
    ########################################################## */
 
 export const adminCreateCuisine = (data) =>
-  API.post("/adminn/cuisines", data);
+  API.post("/adminmeal/cuisines", data);
 
 export const adminGetCuisineById = (id) =>
-  API.get(`/adminn/cuisines/${id}`);
+  API.get(`/adminmeal/cuisines/${id}`);
 
 export const adminGetCuisineByRegion = (region) =>
-  API.get(`/adminn/cuisines/region/${region}`);
+  API.get(`/adminmeal/cuisines/region/${region}`);
 
 export const adminGetCuisineByState = (state) =>
-  API.get(`/adminn/cuisines/state/${state}`);
+  API.get(`/adminmeal/cuisines/state/${state}`);
 
 export const adminUpdateCuisine = (id, data) =>
-  API.put(`/adminn/cuisines/id/${id}`, data);
+  API.put(`/adminmeal/cuisines/id/${id}`, data);
 
 export const adminDeleteCuisine = (id) =>
-  API.delete(`/adminn/cuisines/id/${id}`);
+  API.delete(`/adminmeal/cuisines/id/${id}`);
 
 /* ##########################################################
    ################### ADMIN MEAL ###########################
@@ -328,25 +328,25 @@ export const adminDeleteCuisine = (id) =>
 
    ########################################################## */
 
-export const adminCreateMeal = (data) => API.post("/adminn/meals", data);
+export const adminCreateMeal = (data) => API.post("/adminmeal/meals", data);
 
 export const adminGetMealById = (id) =>
-  API.get(`/adminn/meals/${id}`);
+  API.get(`/adminmeal/meals/${id}`);
 
 export const adminGetMealsByState = (state) =>
-  API.get(`/adminn/meals/state/${state}`);
+  API.get(`/adminmeal/meals/state/${state}`);
 
 export const adminGetMealsByRegion = (region) =>
-  API.get(`/adminn/meals/region/${region}`);
+  API.get(`/adminmeal/meals/region/${region}`);
 
 export const adminGetMealByName = (name) =>
-  API.get(`/adminn/meals/name/${name}`);
+  API.get(`/adminmeal/meals/name/${name}`);
 
 export const adminUpdateMeal = (id, data) =>
-  API.put(`/adminn/meals/${id}`, data);
+  API.put(`/adminmeal/meals/${id}`, data);
 
 export const adminDeleteMeal = (id) =>
-  API.delete(`/adminn/meals/${id}`);
+  API.delete(`/adminmeal/meals/${id}`);
 
 /* ##########################################################
    ################### USER CUISINE ##########################
@@ -354,50 +354,50 @@ export const adminDeleteMeal = (id) =>
 
    ########################################################## */
 
-export const getUserCuisines = () => API.get("/user/cuisines");
-export const getUserCuisineById = (id) => API.get(`/user/cuisines/${id}`);
+export const getUserCuisines = () => API.get("/usermeal/cuisines");
+export const getUserCuisineById = (id) => API.get(`/usermeal/cuisines/${id}`);
 export const getUserCuisinesByRegion = (region) =>
-  API.get(`/user/cuisines/region/${region}`);
+  API.get(`/usermeal/cuisines/region/${region}`);
 export const getUserCuisinesByState = (state) =>
-  API.get(`/user/cuisines/state/${state}`);
+  API.get(`/usermeal/cuisines/state/${state}`);
 export const searchUserCuisineByName = (name) =>
-  API.get(`/user/cuisines/name/${name}`);
+  API.get(`/usermeal/cuisines/name/${name}`);
 
 /* ##########################################################
    ################### USER MEAL #############################
    ########################################################## */
 
-export const getUserMeals = () => API.get("/user/meals");
-export const getUserMealById = (id) => API.get(`/user/meals/${id}`);
+export const getUserMeals = () => API.get("/usermeal/meals");
+export const getUserMealById = (id) => API.get(`/usermeal/meals/${id}`);
 export const getUserMealsByName = (name) =>
-  API.get(`/user/meals/mealName/${name}`);
+  API.get(`/usermeal/meals/mealName/${name}`);
 export const getUserMealsByType = (type) =>
-  API.get(`/user/meals/mealType/${type}`);
+  API.get(`/usermeal/meals/mealType/${type}`);
 export const getUserMealsByRegion = (region) =>
-  API.get(`/user/meals/region/${region}`);
+  API.get(`/usermeal/meals/region/${region}`);
 export const getUserMealsByState = (state) =>
-  API.get(`/user/meals/state/${state}`);
+  API.get(`/usermeal/meals/state/${state}`);
 
 /* ##########################################################
    ################### ADMIN SUBSCRIPTIONS ####################
    ########################################################## */
 
 export const adminGetAllSubscriptions = (status, subscriptionid) =>
-  API.get("/api/admin/subscriptions", {
+  API.get("/adminsubscribtion/subscriptions", {
     params: { status, subscriptionid },
   });
 
 export const adminGetSubscriptionById = (subscriptionid) =>
-  API.get(`/api/admin/subscriptions/${subscriptionid}`);
+  API.get(`/adminsubscribtion/subscriptions/${subscriptionid}`);
 
 export const adminDeleteSubscription = (subscriptionid) =>
-  API.delete(`/api/admin/subscriptions/${subscriptionid}`);
+  API.delete(`/adminsubscribtion/subscriptions/${subscriptionid}`);
 
 export const adminCountSubscriptions = () =>
-  API.get("/api/admin/subscriptions/count");
+  API.get("/adminsubscribtion/subscriptions/count");
 
 export const adminExpiringSoonSubscriptions = (days = 7) =>
-  API.get("/api/admin/subscriptions/expiring-soon", {
+  API.get("/adminsubscribtion/subscriptions/expiring-soon", {
     params: { days },
   });
 
@@ -405,15 +405,15 @@ export const adminExpiringSoonSubscriptions = (days = 7) =>
    ################### ADMIN REVIEWS #########################
    ########################################################## */
 
-export const getAllAdminReviews = () => API.get("/rev/reviews");
+export const getAllAdminReviews = () => API.get("/adminreview/reviews");
 export const getRepliesByReviewId = (reviewId) =>
-  API.get(`/rev/replies/${reviewId}`);
+  API.get(`/adminreview/replies/${reviewId}`);
 export const addAdminReply = (adminId, reviewId, reply) =>
-  API.post(`/rev/${adminId}/replies/${reviewId}`, { reply });
+  API.post(`/adminreview/${adminId}/replies/${reviewId}`, { reply });
 export const updateAdminReply = (reviewId, reply) =>
-  API.put(`/rev/replies/${reviewId}`, { reply });
+  API.put(`/adminreview/replies/${reviewId}`, { reply });
 export const deleteAdminReply = (reviewId) =>
-  API.delete(`/rev/replies/${reviewId}`);
+  API.delete(`/adminreview/replies/${reviewId}`);
 
 /* ##########################################################
    ################### ADMIN ORDERS ##########################
@@ -422,68 +422,68 @@ export const deleteAdminReply = (reviewId) =>
    ########################################################## */
 
 export const adminGetAllOrders = (params = {}) =>
-  API.get("/ordr/admin/orders", { params });
+  API.get("/adminorder/admin/orders", { params });
 
 export const adminGetOrderById = (orderId) =>
-  API.get(`/ordr/admin/orders/${orderId}`);
+  API.get(`/adminorder/admin/orders/${orderId}`);
 
 export const adminGetOrderTimeline = (orderId) =>
-  API.get(`/ordr/admin/orders/${orderId}/timeline`);
+  API.get(`/adminorder/admin/orders/${orderId}/timeline`);
 
 export const adminUpdateOrderStatus = (orderId, data) =>
-  API.put(`/ordr/admin/orders/${orderId}/status`, data);
+  API.put(`/adminorder/admin/orders/${orderId}/status`, data);
 
 export const adminGetRejectionDetails = (orderId) =>
-  API.get(`/ordr/admin/orders/${orderId}/rejection`);
+  API.get(`/adminorder/admin/orders/${orderId}/rejection`);
 
 export const adminGetOrdersCount = () =>
-  API.get("/ordr/admin/orders/count");
+  API.get("/adminorder/admin/orders/count");
 
 export const adminAssignDeliveryPartner = (orderId, partnerId) =>
-  API.post(`/ordr/admin/orders/${orderId}/assign`, { partnerId });
+  API.post(`/adminorder/admin/orders/${orderId}/assign`, { partnerId });
 
 /* ##########################################################
    ################### DELIVERY PARTNERS (ADMIN) #############
    ########################################################## */
 
 export const getAllDeliveryPartners = () =>
-  API.get("/ordr/delivery-partners");
+  API.get("/adminorder/delivery-partners");
 
 export const getDeliveryPartnerById = (id) =>
-  API.get(`/ordr/delivery-partners/${id}`);
+  API.get(`/adminorder/delivery-partners/${id}`);
 
 export const createDeliveryPartner = (data) =>
-  API.post("/ordr/delivery-partners", data);
+  API.post("/adminorder/delivery-partners", data);
 
 export const updateDeliveryPartner = (id, data) =>
-  API.put(`/ordr/delivery-partners/${id}`, data);
+  API.put(`/adminorder/delivery-partners/${id}`, data);
 
 export const deleteDeliveryPartner = (id) =>
-  API.delete(`/ordr/delivery-partners/${id}`);
+  API.delete(`/adminorder/delivery-partners/${id}`);
 
 /* ##########################################################
    ################### USER REVIEWS (FINAL) ##################
    ########################################################## */
 
 // Create new review
-export const createReview = (data) => API.post("/reviews", data);
+export const createReview = (data) => API.post("/userreview", data);
 
 // Get all reviews (user/admin UI)
-export const getAllReviews = () => API.get("/reviews");
+export const getAllReviews = () => API.get("/userreview");
 
 // Get single review by ID
-export const getReviewById = (id) => API.get(`/reviews/${id}`);
+export const getReviewById = (id) => API.get(`/userreview/${id}`);
 
 // Get reviews by ORDER ID
 export const getReviewsByOrderId = (orderId) =>
-  API.get(`/reviews/order/${orderId}`);
+  API.get(`/userreview/order/${orderId}`);
 
 // Update review
 export const updateReview = (id, data) =>
-  API.put(`/reviews/${id}`, data);
+  API.put(`/userreview/${id}`, data);
 
 // Delete review
 export const deleteReviewApi = (id) =>
-  API.delete(`/reviews/${id}`);
+  API.delete(`/userreview/${id}`);
 
 export default API;

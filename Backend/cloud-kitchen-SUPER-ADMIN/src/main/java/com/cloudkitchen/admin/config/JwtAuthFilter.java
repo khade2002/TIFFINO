@@ -33,7 +33,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
         String path = request.getRequestURI();
 
         // Allow login (and optionally register) without JWT
-        if (path.startsWith("/api/admin/login")) {
+        if (path.startsWith("/api/Super/admin/login")) {
             filterChain.doFilter(request, response);
             return;
         }

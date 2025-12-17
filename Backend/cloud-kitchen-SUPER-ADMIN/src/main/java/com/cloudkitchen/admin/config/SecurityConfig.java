@@ -24,8 +24,8 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/admin/login", "/actuator/health").permitAll()
-                        .requestMatchers("/api/admin/export/**").permitAll() // 👈 allow export without JWT
+                        .requestMatchers("/api/Super/admin/login", "/actuator/health").permitAll()
+                        .requestMatchers("/api/Super/admin/export/**").permitAll() // 👈 allow export without JWT
                         .anyRequest().authenticated()
                 );
         http.addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);

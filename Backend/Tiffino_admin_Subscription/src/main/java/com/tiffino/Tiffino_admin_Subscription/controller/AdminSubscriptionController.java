@@ -6,9 +6,10 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Map;
+
 @CrossOrigin("*")
 @RestController
-@RequestMapping("/api/admin/subscriptions")
+@RequestMapping("/api/adminsubscribtion/subscriptions")
 public class AdminSubscriptionController {
 
     private final AdminSubscriptionService service;

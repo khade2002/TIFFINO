@@ -32,8 +32,8 @@ public class SecurityConfig {
 
                         /* Public admin endpoints */
                         .requestMatchers(
-                                "/admin/login",
-                                "/admin/forgot-password"
+                                "/api/adminlog/login",
+                                "/api/adminlog/forgot-password"
                         ).permitAll()
 
                         /* All other endpoints require JWT */

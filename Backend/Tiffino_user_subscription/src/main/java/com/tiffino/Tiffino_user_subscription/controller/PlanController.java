@@ -6,9 +6,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
+
 @CrossOrigin("*")
 @RestController
-@RequestMapping("/subscri/plans")
+@RequestMapping("/api/usersubscribtion/subscri/plans")
 public class PlanController {
 
     @Autowired
